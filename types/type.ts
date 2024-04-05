@@ -35,7 +35,11 @@ interface getPlaylistByCategoryInterface {
 export type { getPlaylistByCategoryInterface as getPlaylistByCategoryType };
 
 interface getPlaylistTracksInterface {
-  items: [];
+  items: [
+    {
+      track: tracksInterface;
+    }
+  ];
 }
 
 export type { getPlaylistTracksInterface as getPlaylistTracksType };
