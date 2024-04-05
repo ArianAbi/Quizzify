@@ -1,17 +1,22 @@
-export function getRandomIndexInRange(min: number, max: number) {
+export function generateRandomIndexInRange(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function getDiffrentRandomIndex(
+export function generateDiffrentRandomIndex(
   reference: number,
   min: number,
   max: number
 ) {
-  const generatedIndex = Math.floor(Math.random() * (max - min + 1) + min);
+  let generatedIndex = generateRandomIndexInRange(min, max);
 
-  if (generatedIndex === reference) {
-    getDiffrentRandomIndex(reference, min, max);
-  } else {
-    return generatedIndex;
+  // if (generatedIndex === reference) {
+  //   generateDiffrentRandomIndex(reference, min, max);
+  // } else {
+  //   return generatedIndex;
+  // }
+  while (generatedIndex === reference) {
+    generatedIndex = generateRandomIndexInRange(min, max);
   }
+
+  return generatedIndex;
 }
