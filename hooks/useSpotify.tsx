@@ -71,19 +71,3 @@ export async function getPlaylistTracks(playlist_id: string) {
 
   return (await response.json()) as getPlaylistTracksType;
 }
-
-export async function getTracksStreams(track_id: string) {
-  const url =
-    "https://spotify-track-streams-playback-count1.p.rapidapi.com/tracks/spotify_track_streams?spotify_track_id=6ho0GyrWZN3mhi9zVRW7xi&isrc=CA5KR1821202";
-  const options2 = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": "168aa06500mshcebc1f433fc8bd0p18c58ajsnbc4394fe53bc",
-      "X-RapidAPI-Host": "spotify-track-streams-playback-count1.p.rapidapi.com",
-    },
-  };
-
-  const response = await fetch(url, options2);
-
-  return await response.json();
-}
