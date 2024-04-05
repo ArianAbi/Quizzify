@@ -6,12 +6,13 @@ import {
 const baseUrl = "https://api.spotify.com/v1";
 
 const access_token_raw = localStorage.getItem("access-token");
-const access_token = access_token_raw && JSON.parse(access_token_raw);
+const access_token: { access_token: string } | null =
+  access_token_raw && JSON.parse(access_token_raw);
 
 const options = {
   method: "GET",
   headers: {
-    Authorization: "Bearer " + access_token.access_token,
+    Authorization: "Bearer " + access_token?.access_token,
   },
 };
 
@@ -32,6 +33,7 @@ export async function getCredentials() {
   });
 
   const result = await response.json();
+
   return result;
 }
 
