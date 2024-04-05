@@ -3,10 +3,10 @@ import {
   getCredentials,
   getPlaylistByCategory,
   getPlaylistTracks,
-  getTracksStreams,
 } from "../hooks/useSpotify";
 import "./css/App.css";
 import { tracksType } from "../types/type";
+import { Link } from "react-router-dom";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -44,12 +44,6 @@ function App() {
     setLoading(false);
   }
 
-  async function getStreams(track_id: string) {
-    const result = await getTracksStreams(track_id);
-
-    console.log(result);
-  }
-
   return (
     <>
       <div className="container">
@@ -65,9 +59,13 @@ function App() {
           >
             Get Pop Tracks
           </button>
-          <button onClick={() => getStreams("1rBiNR61IhvbzeKwfs3AwE")}>
-            Get Kool-Aid Streams
-          </button>
+          <Link
+            to={"/game"}
+            style={{ marginInline: "1rem", color: "white" }}
+            onClick={() => getListOfTracks("pop")}
+          >
+            Go To Game
+          </Link>
         </div>
 
         <ul>
