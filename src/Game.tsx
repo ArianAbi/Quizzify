@@ -49,25 +49,39 @@ export default function Game() {
     getTracksFromPlaylist("metal");
   }, []);
 
-  //set loading to false if we successfuly fetched the tracks from a playlist and generate the first index
+  //set loading to false if we successfuly fetched the tracks from a playlist and generate the first and second index
   useEffect(() => {
     if (fetchedTracks) {
+      const firstIndex = generateRandomIndexInRange(0, fetchedTracks.length);
+      const secondIndex = generateDiffrentRandomIndex(
+        firstIndex,
+        0,
+        fetchedTracks.length
+      );
       setLoading(false);
-      setIndexA(generateRandomIndexInRange(0, fetchedTracks.length));
+      setIndexA(firstIndex);
+      setIndexB(secondIndex);
     }
   }, [fetchedTracks]);
 
-  //generate the second index
-  useEffect(() => {
-    if (indexA >= 0 && fetchedTracks) {
-      setIndexB(generateDiffrentRandomIndex(indexA, 0, fetchedTracks.length));
+  function getNewIndex(index: "indexA" | "indexB") {
+    if (!fetchedTracks) {
+      return;
     }
-  }, [indexA]);
 
-  //log on availableTracks change
-  // useEffect(() => {
-  //   console.log(availableTracks.current);
-  // }, [availableTracks.current]);
+    switch (index) {
+      case "indexA":
+        setIndexA(generateDiffrentRandomIndex(indexA, 0, fetchedTracks.length));
+        break;
+
+      case "indexB":
+        setIndexB(generateDiffrentRandomIndex(indexB, 0, fetchedTracks.length));
+        break;
+
+      default:
+        break;
+    }
+  }
 
   function onUserSelection(selection_index: "indexA" | "indexB") {
     if (fetchedTracks === null) {
@@ -79,6 +93,7 @@ export default function Game() {
         if (
           fetchedTracks[indexA].duration_ms > fetchedTracks[indexB].duration_ms
         ) {
+          getNewIndex("indexB");
           console.log("Correct Answer, A is Longer");
         } else {
           console.log("Wrong Answer, B is Longer");
@@ -90,6 +105,7 @@ export default function Game() {
         if (
           fetchedTracks[indexB].duration_ms > fetchedTracks[indexA].duration_ms
         ) {
+          getNewIndex("indexA");
           console.log("Correct Answer, B is Longer");
         } else {
           console.log("Wrong Answer, A is Longer");
