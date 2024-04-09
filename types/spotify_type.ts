@@ -23,7 +23,7 @@ interface tracksInterface {
   name: string;
 }
 
-export type { tracksInterface as tracksType };
+export type { tracksInterface as spotify_tracksType };
 
 interface getPlaylistByCategoryInterface {
   message: string;
@@ -32,7 +32,7 @@ interface getPlaylistByCategoryInterface {
   };
 }
 
-export type { getPlaylistByCategoryInterface as getPlaylistByCategoryType };
+export type { getPlaylistByCategoryInterface as spotify_playlistByCategoryType };
 
 interface getPlaylistTracksInterface {
   items: [
@@ -42,4 +42,4 @@ interface getPlaylistTracksInterface {
   ];
 }
 
-export type { getPlaylistTracksInterface as getPlaylistTracksType };
+export type { getPlaylistTracksInterface as spotify_playlistTracksType };

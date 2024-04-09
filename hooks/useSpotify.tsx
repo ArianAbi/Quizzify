@@ -1,7 +1,8 @@
 import {
-  getPlaylistByCategoryType,
-  getPlaylistTracksType,
-} from "../types/type";
+  spotify_playlistByCategoryType,
+  spotify_playlistTracksType,
+  spotify_tracksType,
+} from "../types/spotify_type";
 
 const baseUrl = "https://api.spotify.com/v1";
 
@@ -16,7 +17,7 @@ const options = {
   },
 };
 
-export async function getCredentials() {
+export async function spotify_storeCredentials() {
   const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const SECRET = import.meta.env.VITE_SECRET;
 
@@ -34,10 +35,12 @@ export async function getCredentials() {
 
   const result = await response.json();
 
-  return result;
+  result && localStorage.setItem("access-token", JSON.stringify(result));
+
+  return "200 access token set";
 }
 
-export async function getArtistByID(Artist_ID: string) {
+export async function spotify_getArtistByID(Artist_ID: string) {
   const response = await fetch(`${baseUrl}/artists/${Artist_ID}`, options);
 
   return await response.json();
@@ -54,20 +57,37 @@ export async function getList(type: "artist") {
   return await response.json();
 }
 
-export async function getPlaylistByCategory(category: string) {
+export async function spotify_getPlaylistByCategory(category: string) {
   const response = await fetch(
     `${baseUrl}/browse/categories/${category}/playlists`,
     options
   );
 
-  return (await response.json()) as getPlaylistByCategoryType;
+  console.log(await response.json());
+
+  return (await response.json()) as spotify_playlistByCategoryType;
 }
 
-export async function getPlaylistTracks(playlist_id: string) {
+export async function spotify_getPlaylistTracks(playlist_id: string) {
   const response = await fetch(
     `${baseUrl}/playlists/${playlist_id}/tracks`,
     options
   );
 
-  return (await response.json()) as getPlaylistTracksType;
+  return (await response.json()) as spotify_playlistTracksType;
+}
+
+export async function spotify_searchTrack(artist: string, title: string) {
+  const respons = await fetch(
+    `${baseUrl}/search?q=${encodeURIComponent(artist)}%20${encodeURIComponent(
+      title
+    )}&type=track`,
+    options
+  );
+
+  const result = await respons.json();
+
+  const track = result.tracks.items[0];
+
+  return track as spotify_tracksType;
 }
