@@ -1,6 +1,6 @@
 import {
-  youtubePlaylistByIdType,
-  youtubeVideoStatisticsType,
+  youtube_playlistByIdType,
+  youtube_videoStatisticsType,
 } from "../types/youtube_types";
 
 const KEY = import.meta.env.VITE_YOUTUBE_KEY;
@@ -25,7 +25,7 @@ export async function getPlaylistItemsById(id: string) {
 
     const result = await response.json();
 
-    return result.items as youtubePlaylistByIdType[];
+    return result.items as youtube_playlistByIdType[];
   } catch (err) {
     console.log(err);
   }
@@ -39,7 +39,7 @@ export async function getVideoStatistics(id: string) {
 
     const result = await response.json();
 
-    return result.items as youtubeVideoStatisticsType;
+    return result.items[0] as youtube_videoStatisticsType;
   } catch (err) {
     console.log(err);
   }

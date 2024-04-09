@@ -1,4 +1,4 @@
-interface youtubePlaylistById {
+interface youtube_playlistById {
   snippet: {
     description: string;
     title: string;
@@ -31,9 +31,9 @@ interface youtubePlaylistById {
   };
 }
 
-export type { youtubePlaylistById as youtubePlaylistByIdType };
+export type { youtube_playlistById as youtube_playlistByIdType };
 
-interface youtubeVideoStatistics {
+interface youtube_videoStatistics {
   id: string;
   statistics: {
     commentCount: string;
@@ -42,4 +42,4 @@ interface youtubeVideoStatistics {
   };
 }
 
-export type { youtubeVideoStatistics as youtubeVideoStatisticsType };
+export type { youtube_videoStatistics as youtube_videoStatisticsType };
