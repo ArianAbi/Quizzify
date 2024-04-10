@@ -1,22 +1,10 @@
-export function generateRandomIndexInRange(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+export function generateRandomIndexInRange(max: number) {
+  let indexes: number[] = [];
 
-export function generateDiffrentRandomIndex(
-  reference: number,
-  min: number,
-  max: number
-) {
-  let generatedIndex = generateRandomIndexInRange(min, max);
-
-  // if (generatedIndex === reference) {
-  //   generateDiffrentRandomIndex(reference, min, max);
-  // } else {
-  //   return generatedIndex;
-  // }
-  while (generatedIndex === reference) {
-    generatedIndex = generateRandomIndexInRange(min, max);
+  while (indexes.length < max) {
+    let r = Math.floor(Math.random() * max + 1);
+    if (indexes.indexOf(r) === -1) indexes.push(r);
   }
 
-  return generatedIndex;
+  return indexes;
 }
