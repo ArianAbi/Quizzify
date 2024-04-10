@@ -20,17 +20,15 @@ export default function TrackCard({
   const [trackFromSpotify, setTrackFromSpotify] =
     useState<null | spotify_tracksType>(null);
 
-  const [artist, title] = video.snippet.title.split("-");
-
   useEffect(() => {
     getStatistics(video.snippet.resourceId.videoId);
 
-    getTrackFromSpotify(artist, title);
+    getTrackFromSpotify(video.snippet.title);
   }, []);
 
-  async function getTrackFromSpotify(artist: string, title: string) {
+  async function getTrackFromSpotify(title: string) {
     try {
-      const track = await spotify_searchTrack(artist, title);
+      const track = await spotify_searchTrack(title);
 
       track && setTrackFromSpotify(track);
       setLoading(false);
@@ -77,8 +75,7 @@ export default function TrackCard({
             className="absolute left-0 top-0 w-full h-full z-[-1] object-cover transition-all brightness-75 group-hover:brightness-50"
             src={video.snippet.thumbnails.standard.url}
           />
-          <h2>{title}</h2>
-          <h2>by {artist}</h2>
+          <h2>{video.snippet.title}</h2>
 
           {statistics && (
             <span className="absolute bottom-8 left-2/4 -translate-x-2/4">

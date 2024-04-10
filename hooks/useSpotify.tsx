@@ -77,11 +77,9 @@ export async function spotify_getPlaylistTracks(playlist_id: string) {
   return (await response.json()) as spotify_playlistTracksType;
 }
 
-export async function spotify_searchTrack(artist: string, title: string) {
+export async function spotify_searchTrack(title: string) {
   const respons = await fetch(
-    `${baseUrl}/search?q=${encodeURIComponent(artist)}%20${encodeURIComponent(
-      title
-    )}&type=track`,
+    `${baseUrl}/search?q=${encodeURIComponent(title)}&type=track`,
     options
   );
 
@@ -91,3 +89,18 @@ export async function spotify_searchTrack(artist: string, title: string) {
 
   return track as spotify_tracksType;
 }
+
+// export async function spotify_searchTrack(artist: string, title: string) {
+//   const respons = await fetch(
+//     `${baseUrl}/search?q=${encodeURIComponent(artist)}%20${encodeURIComponent(
+//       title
+//     )}&type=track`,
+//     options
+//   );
+
+//   const result = await respons.json();
+
+//   const track = result.tracks.items[0];
+
+//   return track as spotify_tracksType;
+// }
