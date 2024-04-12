@@ -84,6 +84,7 @@ export default function Game() {
     }
   }, [tracks]);
 
+  //fetch the statistics for
   useEffect(() => {
     if (!tracks || !randomIndexes) return;
 
@@ -151,7 +152,8 @@ export default function Game() {
   return (
     <>
       <div>
-        <div className="absolute top-4 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1">
+        {/* scoreboard */}
+        <div className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1">
           <h1 className="text-lg font-semibold">
             Which Song has the most views on Youtube?
           </h1>
@@ -159,7 +161,7 @@ export default function Game() {
         </div>
 
         {tracks && randomIndexes && (
-          <div className="w-full grid grid-cols-2 min-h-svh">
+          <div className="w-full min-h-svh grid grid-cols-1 grid-rows-2 sm:grid-rows-1 sm:grid-cols-2">
             {/* first track , option A */}
             <div
               className="w-full h-full relative overflow-hidden"
@@ -183,25 +185,6 @@ export default function Game() {
             </div>
           </div>
         )}
-
-        <div style={{ textAlign: "center" }}>
-          <h2>List of Tracks</h2>
-          <ul>
-            {tracks &&
-              tracks.map((item, _i: number) => {
-                const thumbnail = item.snippet.thumbnails.medium;
-
-                const title = item.snippet.title.replace(/ *\([^)]*\) */g, "");
-
-                return (
-                  <li className="flex flex-col gap-2" key={_i}>
-                    {thumbnail != undefined && <img src={thumbnail.url} />}
-                    <span>{title}</span>
-                  </li>
-                );
-              })}
-          </ul>
-        </div>
       </div>
     </>
   );
