@@ -85,22 +85,7 @@ export async function spotify_searchTrack(title: string) {
 
   const result = await respons.json();
 
-  const track = result.tracks.items[0];
+  const track = result.tracks.items[2];
 
   return track as spotify_tracksType;
 }
-
-// export async function spotify_searchTrack(artist: string, title: string) {
-//   const respons = await fetch(
-//     `${baseUrl}/search?q=${encodeURIComponent(artist)}%20${encodeURIComponent(
-//       title
-//     )}&type=track`,
-//     options
-//   );
-
-//   const result = await respons.json();
-
-//   const track = result.tracks.items[0];
-
-//   return track as spotify_tracksType;
-// }
