@@ -10,8 +10,10 @@ import ProgressiveImage from "./ProgressiveImage";
 
 export default function TrackCard({
   video,
+  revealed,
 }: {
   video: youtube_playlistByIdType;
+  revealed?: boolean;
 }) {
   const [loading, setLoading] = useState(true);
 
@@ -59,15 +61,20 @@ export default function TrackCard({
             img={trackFromSpotify.album.images[0].url}
             placeholderImg={trackFromSpotify.album.images[2].url}
           />
-          <h2>{trackFromSpotify.name}</h2>
-          <h2>by {trackFromSpotify.artists[0].name}</h2>
 
-          {statistics && (
-            <span className="absolute bottom-8 left-2/4 -translate-x-2/4">
-              Views :{" "}
-              {parseInt(statistics.statistics.viewCount).toLocaleString()}
-            </span>
-          )}
+          <div className="bg-black px-4 py-2 bg-opacity-80">
+            <h2>{trackFromSpotify.name}</h2>
+            <h2 className={`${revealed ? "mb-4" : ""} mt-4`}>
+              by {trackFromSpotify.artists[0].name}
+            </h2>
+
+            {statistics && revealed && (
+              <span>
+                Views :{" "}
+                {parseInt(statistics.statistics.viewCount).toLocaleString()}
+              </span>
+            )}
+          </div>
         </div>
       )}
 
@@ -78,14 +85,17 @@ export default function TrackCard({
             img={video.snippet.thumbnails.standard.url}
             placeholderImg={video.snippet.thumbnails.standard.url}
           />
-          <h2>{video.snippet.title}</h2>
 
-          {statistics && (
-            <span className="absolute bottom-8 left-2/4 -translate-x-2/4">
-              Views :{" "}
-              {parseInt(statistics.statistics.viewCount).toLocaleString()}
-            </span>
-          )}
+          <div className="bg-black px-4 py-2 bg-opacity-80">
+            <h2>{video.snippet.title}</h2>
+
+            {statistics && revealed && (
+              <span>
+                Views :{" "}
+                {parseInt(statistics.statistics.viewCount).toLocaleString()}
+              </span>
+            )}
+          </div>
         </div>
       )}
     </>

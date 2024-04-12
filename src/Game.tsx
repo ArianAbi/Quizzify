@@ -17,6 +17,9 @@ export default function Game() {
   const [tracks, setTracks] = useState<null | youtube_playlistByIdType[]>(null);
   const [score, setScore] = useState(0);
 
+  const [A_Revealed, setA_Revealed] = useState(false);
+  const [B_Revealed, setB_Revealed] = useState(false);
+
   const { current: statistics } = useRef<{
     a: youtube_videoStatisticsType | undefined;
     b: youtube_videoStatisticsType | undefined;
@@ -52,8 +55,6 @@ export default function Game() {
           }
         });
 
-        console.log(clean_list);
-
         setTracks(clean_list as youtube_playlistByIdType[]);
         setLoading(false);
       } catch (err) {
@@ -68,13 +69,6 @@ export default function Game() {
 
     setRandomIndexes(generateRandomIndexInRange(tracks.length));
   }, [tracks]);
-
-  useEffect(() => {
-    if (!randomIndexes) return;
-
-    console.log(tracks);
-    console.log(randomIndexes);
-  }, [randomIndexes]);
 
   useEffect(() => {
     if (!tracks) return;
@@ -121,6 +115,8 @@ export default function Game() {
           setScore((prev) => prev + 1);
           indexHolder[1] = indexHolder[indexHolder.length - 1];
           indexHolder.pop();
+          setA_Revealed(true);
+          setB_Revealed(false);
           setRandomIndexes(indexHolder);
         } else {
           //wrong answer
@@ -135,7 +131,8 @@ export default function Game() {
         ) {
           //correct answer
           setScore((prev) => prev + 1);
-
+          setB_Revealed(true);
+          setA_Revealed(false);
           indexHolder[0] = indexHolder[indexHolder.length - 1];
           indexHolder.pop();
           setRandomIndexes(indexHolder);
@@ -153,7 +150,7 @@ export default function Game() {
     <>
       <div>
         {/* scoreboard */}
-        <div className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1">
+        <div className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-10">
           <h1 className="text-lg font-semibold">
             Which Song has the most views on Youtube?
           </h1>
@@ -168,9 +165,20 @@ export default function Game() {
               onClick={() => userSelected("A")}
             >
               <TrackCard
+                revealed={A_Revealed}
                 video={tracks[randomIndexes[0]]}
                 key={randomIndexes[0]}
               />
+            </div>
+
+            {/* or */}
+            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 h-full w-16">
+              <span className="text-2xl font-semibold p-5 aspect-square rounded-full text-black bg-white z-[5]">
+                OR
+              </span>
+
+              {/* divider */}
+              <div className="absolute bg-white h-full w-0"></div>
             </div>
 
             {/* second track , option B */}
@@ -179,6 +187,7 @@ export default function Game() {
               onClick={() => userSelected("B")}
             >
               <TrackCard
+                revealed={B_Revealed}
                 video={tracks[randomIndexes[1]]}
                 key={randomIndexes[1]}
               />
