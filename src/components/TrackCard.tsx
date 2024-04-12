@@ -6,6 +6,7 @@ import {
   youtube_videoStatisticsType,
 } from "../../types/youtube_types";
 import { useState, useEffect } from "react";
+import ProgressiveImage from "./ProgressiveImage";
 
 export default function TrackCard({
   video,
@@ -53,9 +54,10 @@ export default function TrackCard({
     <>
       {trackFromSpotify && (
         <div className="cursor-pointer text-xl font-bold overflow-hidden h-full w-full relative flex flex-col gap-6 justify-center items-center group">
-          <img
+          <ProgressiveImage
             className="absolute left-0 top-0 w-full h-full z-[-1] object-cover transition-all brightness-75 group-hover:brightness-50"
-            src={trackFromSpotify.album.images[0].url}
+            img={trackFromSpotify.album.images[0].url}
+            placeholderImg={trackFromSpotify.album.images[2].url}
           />
           <h2>{trackFromSpotify.name}</h2>
           <h2>by {trackFromSpotify.artists[0].name}</h2>
@@ -71,9 +73,10 @@ export default function TrackCard({
 
       {!trackFromSpotify && !loading && (
         <div className="cursor-pointer text-xl font-bold overflow-hidden h-full w-full relative flex flex-col gap-6 justify-center items-center group">
-          <img
+          <ProgressiveImage
             className="absolute left-0 top-0 w-full h-full z-[-1] object-cover transition-all brightness-75 group-hover:brightness-50"
-            src={video.snippet.thumbnails.standard.url}
+            img={video.snippet.thumbnails.standard.url}
+            placeholderImg={video.snippet.thumbnails.standard.url}
           />
           <h2>{video.snippet.title}</h2>
 
