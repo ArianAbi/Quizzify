@@ -12,9 +12,10 @@ import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 export default function Game() {
   const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
 
-  const [loading, setLoading] = useState(true);
-  const [randomIndexes, setIndexes] = useState<null | number[]>();
+  const [_loading, setLoading] = useState(true);
+  const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
   const [tracks, setTracks] = useState<null | youtube_playlistByIdType[]>(null);
+  const [score, setScore] = useState(0);
 
   const { current: statistics } = useRef<{
     a: youtube_videoStatisticsType | undefined;
@@ -51,6 +52,8 @@ export default function Game() {
           }
         });
 
+        console.log(clean_list);
+
         setTracks(clean_list as youtube_playlistByIdType[]);
         setLoading(false);
       } catch (err) {
@@ -63,8 +66,15 @@ export default function Game() {
   useEffect(() => {
     if (!tracks) return;
 
-    setIndexes(generateRandomIndexInRange(tracks.length));
+    setRandomIndexes(generateRandomIndexInRange(tracks.length));
   }, [tracks]);
+
+  useEffect(() => {
+    if (!randomIndexes) return;
+
+    console.log(tracks);
+    console.log(randomIndexes);
+  }, [randomIndexes]);
 
   useEffect(() => {
     if (!tracks) return;
@@ -106,13 +116,13 @@ export default function Game() {
           parseInt(statistics.a.statistics.viewCount) >
           parseInt(statistics.b.statistics.viewCount)
         ) {
-          console.log("A is Bigger");
-
+          //correct answer
+          setScore((prev) => prev + 1);
           indexHolder[1] = indexHolder[indexHolder.length - 1];
           indexHolder.pop();
-          setIndexes(indexHolder);
+          setRandomIndexes(indexHolder);
         } else {
-          console.log("B is Bigger");
+          //wrong answer
         }
 
         break;
@@ -122,13 +132,14 @@ export default function Game() {
           parseInt(statistics.b.statistics.viewCount) >
           parseInt(statistics.a.statistics.viewCount)
         ) {
-          console.log("B is Bigger");
+          //correct answer
+          setScore((prev) => prev + 1);
 
           indexHolder[0] = indexHolder[indexHolder.length - 1];
           indexHolder.pop();
-          setIndexes(indexHolder);
+          setRandomIndexes(indexHolder);
         } else {
-          console.log("A is Bigger");
+          //wrong answer
         }
         break;
 
@@ -139,17 +150,21 @@ export default function Game() {
 
   return (
     <>
-      <div className="container">
-        <span>{loading ? "loading..." : "All Set"}</span>
+      <div>
+        <div className="absolute top-4 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1">
+          <h1 className="text-lg font-semibold">
+            Which Song has the most views on Youtube?
+          </h1>
+          <span className="font-semibold text-lg mt-2">Score : {score}</span>
+        </div>
 
         {tracks && randomIndexes && (
-          <div className="w-full grid grid-cols-2 min-h-[500px]">
+          <div className="w-full grid grid-cols-2 min-h-svh">
             {/* first track , option A */}
             <div
               className="w-full h-full relative overflow-hidden"
               onClick={() => userSelected("A")}
             >
-              A
               <TrackCard
                 video={tracks[randomIndexes[0]]}
                 key={randomIndexes[0]}
@@ -161,7 +176,6 @@ export default function Game() {
               className="w-full h-full relative overflow-hidden"
               onClick={() => userSelected("B")}
             >
-              B
               <TrackCard
                 video={tracks[randomIndexes[1]]}
                 key={randomIndexes[1]}
