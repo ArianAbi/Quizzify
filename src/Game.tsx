@@ -12,7 +12,7 @@ import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 export default function Game() {
   const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
 
-  const [_loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
   const [tracks, setTracks] = useState<null | youtube_playlistByIdType[]>(null);
   const [score, setScore] = useState(0);
@@ -36,12 +36,16 @@ export default function Game() {
   }
 
   useEffect(() => {
+    (async () => {
+      //stores the spotify access token
+      await spotify_storeCredentials().then(() => setLoading(false));
+    })();
+  }, []);
+
+  useEffect(() => {
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        //stores the spotify access token
-        await spotify_storeCredentials();
-
         const items = await getPlaylistItemsById(youtube_00s_playlist);
 
         if (items === undefined) {
@@ -61,7 +65,7 @@ export default function Game() {
         console.log(err);
       }
     })();
-  }, []);
+  }, [loading]);
 
   //generate the indexes after we got the list of tracks
   useEffect(() => {
@@ -157,7 +161,7 @@ export default function Game() {
           <span className="font-semibold text-lg mt-2">Score : {score}</span>
         </div>
 
-        {tracks && randomIndexes && (
+        {tracks && randomIndexes && !loading && (
           <div className="w-full min-h-svh grid grid-cols-1 grid-rows-2 sm:grid-rows-1 sm:grid-cols-2">
             {/* first track , option A */}
             <div
