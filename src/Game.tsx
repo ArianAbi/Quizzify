@@ -19,6 +19,7 @@ export default function Game() {
 
   const [A_Revealed, setA_Revealed] = useState(false);
   const [B_Revealed, setB_Revealed] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
 
   const { current: statistics } = useRef<{
     a: youtube_videoStatisticsType | undefined;
@@ -117,11 +118,17 @@ export default function Game() {
         ) {
           //correct answer
           setScore((prev) => prev + 1);
-          indexHolder[1] = indexHolder[indexHolder.length - 1];
-          indexHolder.pop();
           setA_Revealed(true);
-          setB_Revealed(false);
-          setRandomIndexes(indexHolder);
+          setB_Revealed(true);
+          setTransitioning(true);
+
+          setTimeout(() => {
+            indexHolder[1] = indexHolder[indexHolder.length - 1];
+            indexHolder.pop();
+            setB_Revealed(false);
+            setTransitioning(false);
+            setRandomIndexes(indexHolder);
+          }, 2000);
         } else {
           //wrong answer
         }
@@ -136,10 +143,16 @@ export default function Game() {
           //correct answer
           setScore((prev) => prev + 1);
           setB_Revealed(true);
-          setA_Revealed(false);
-          indexHolder[0] = indexHolder[indexHolder.length - 1];
-          indexHolder.pop();
-          setRandomIndexes(indexHolder);
+          setA_Revealed(true);
+          setTransitioning(true);
+
+          setTimeout(() => {
+            setA_Revealed(false);
+            indexHolder[0] = indexHolder[indexHolder.length - 1];
+            indexHolder.pop();
+            setTransitioning(false);
+            setRandomIndexes(indexHolder);
+          }, 2000);
         } else {
           //wrong answer
         }
@@ -177,12 +190,22 @@ export default function Game() {
 
             {/* or */}
             <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 h-full w-16">
-              <span className="text-2xl font-semibold p-5 aspect-square rounded-full text-black bg-white z-[5]">
+              <span
+                className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500
+                ${
+                  transitioning
+                    ? "bg-emerald-500 text-white scale-125"
+                    : "bg-white"
+                }`}
+              >
                 OR
               </span>
 
               {/* divider */}
-              <div className="absolute bg-white h-full w-0"></div>
+              <div
+                className={`absolute h-full w-0 transition-all duration-500
+                ${transitioning ? "bg-emerald-500 w-4" : "bg-white"}`}
+              ></div>
             </div>
 
             {/* second track , option B */}
