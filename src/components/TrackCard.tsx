@@ -7,6 +7,7 @@ import {
 } from "../../types/youtube_types";
 import { useState, useEffect } from "react";
 import ProgressiveImage from "./ProgressiveImage";
+import AnimatedContainer from "./AnimatedContainer";
 
 export default function TrackCard({
   video,
@@ -61,20 +62,24 @@ export default function TrackCard({
             img={trackFromSpotify.album.images[0].url}
             placeholderImg={trackFromSpotify.album.images[2].url}
           />
-
-          <div className="bg-black px-4 py-2 bg-opacity-80">
+          <AnimatedContainer duration="0.3s" className="bg-black bg-opacity-80">
             <h2>{trackFromSpotify.name}</h2>
             <h2 className={`${revealed ? "mb-4" : ""} mt-4`}>
               by {trackFromSpotify.artists[0].name}
             </h2>
 
-            {statistics && revealed && (
-              <span>
+            {statistics && (
+              <span
+                key={video.snippet.title}
+                style={{
+                  display: revealed ? "block" : "none",
+                }}
+              >
                 Views :{" "}
                 {parseInt(statistics.statistics.viewCount).toLocaleString()}
               </span>
             )}
-          </div>
+          </AnimatedContainer>
         </div>
       )}
 
