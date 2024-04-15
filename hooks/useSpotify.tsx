@@ -85,7 +85,7 @@ export async function spotify_searchTrack(title: string) {
 
   const result = await respons.json();
 
-  const track = result.tracks.items[2];
+  const track = result.tracks.items[0];
 
   return track as spotify_tracksType;
 }
