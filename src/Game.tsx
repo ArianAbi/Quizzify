@@ -6,11 +6,15 @@ import {
 } from "../types/youtube_types";
 import { getPlaylistItemsById, getVideoStatistics } from "../hooks/useYoutube";
 import TrackCard from "./components/TrackCard";
-import { spotify_storeCredentials } from "../hooks/useSpotify";
+import {
+  spotify_searchTrack,
+  spotify_storeCredentials,
+} from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 
 export default function Game() {
   const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
+  const youtube_2024_metal_playlist = "PLOUzUrKhNae6JqXAjG56Akc79vuzYCOYz";
 
   const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
@@ -47,14 +51,14 @@ export default function Game() {
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        const items = await getPlaylistItemsById(youtube_00s_playlist);
+        const data = await getPlaylistItemsById(youtube_2024_metal_playlist);
 
-        if (items === undefined) {
+        if (data === undefined) {
           throw new Error("failed to fetch the playlist items");
         }
 
         //remove deleted videos to prevent errors
-        const clean_list = items.filter((item) => {
+        const clean_list = data.items.filter((item) => {
           if (item.snippet.title !== "Deleted video") {
             return item as youtube_playlistByIdType;
           }
@@ -189,7 +193,7 @@ export default function Game() {
             </div>
 
             {/* or */}
-            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 h-full w-16">
+            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none">
               <span
                 className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500
                 ${
@@ -203,8 +207,9 @@ export default function Game() {
 
               {/* divider */}
               <div
-                className={`absolute h-full w-0 transition-all duration-500
-                ${transitioning ? "bg-emerald-500 w-4" : "bg-white"}`}
+                className={`absolute w-full h-0 sm:h-full sm:w-0 transition-all duration-500
+                ${transitioning ? "bg-emerald-500 h-4 sm:w-4" : "bg-white"}`}
+                style={{ visibility: transitioning ? "visible" : "hidden" }}
               ></div>
             </div>
 

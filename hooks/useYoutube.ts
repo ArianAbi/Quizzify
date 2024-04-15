@@ -25,7 +25,10 @@ export async function getPlaylistItemsById(id: string) {
 
     const result = await response.json();
 
-    return result.items as youtube_playlistByIdType[];
+    return {
+      items: result.items as youtube_playlistByIdType[],
+      nextPageToken: result.nextPageToken as string,
+    };
   } catch (err) {
     console.log(err);
   }
