@@ -6,14 +6,12 @@ import {
 } from "../types/youtube_types";
 import { getPlaylistItemsById, getVideoStatistics } from "../hooks/useYoutube";
 import TrackCard from "./components/TrackCard";
-import {
-  spotify_searchTrack,
-  spotify_storeCredentials,
-} from "../hooks/useSpotify";
+import { spotify_storeCredentials } from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
+import Check_Icon from "./assets/icons/Check_Icon";
 
 export default function Game() {
-  const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
+  // const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
   const youtube_2024_metal_playlist = "PLOUzUrKhNae6JqXAjG56Akc79vuzYCOYz";
 
   const [loading, setLoading] = useState(true);
@@ -195,14 +193,28 @@ export default function Game() {
             {/* or */}
             <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none">
               <span
-                className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500
+                className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 w-20 h-20 relative
                 ${
                   transitioning
                     ? "bg-emerald-500 text-white scale-125"
                     : "bg-white"
                 }`}
               >
-                OR
+                <span
+                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transition-all duration-3 00
+                ${transitioning ? "scale-0" : "scale-100"}`}
+                >
+                  OR
+                </span>
+
+                <Check_Icon
+                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 text-white transition-all duration-500
+                  ${
+                    transitioning
+                      ? "scale-100 rotate-0"
+                      : "scale-0 -rotate-[180deg]"
+                  }`}
+                />
               </span>
 
               {/* divider */}
