@@ -4,10 +4,12 @@ export default function AnimatedContainer({
   children,
   className,
   duration,
+  animateOnlyWidth,
 }: {
   children: React.ReactNode;
   className?: string;
   duration: string;
+  animateOnlyWidth?: boolean;
 }) {
   const heightMask = useRef<any>();
   const content = useRef<any>();
@@ -25,7 +27,9 @@ export default function AnimatedContainer({
 
   return (
     <div
-      className={`overflow-hidden relative min-h-[20px] min-w-[100px] ${className}`}
+      className={`overflow-hidden absolute ${
+        animateOnlyWidth ? "" : "min-h-[20px]"
+      } min-w-[100px] ${className}`}
       style={{
         transition: `min-height max-height min-width max-width ease`,
         transitionDuration: duration,

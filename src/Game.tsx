@@ -9,10 +9,11 @@ import TrackCard from "./components/TrackCard";
 import { spotify_storeCredentials } from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 import Check_Icon from "./assets/icons/Check_Icon";
+import AnimatedContainer from "./components/AnimatedContainer";
 
 export default function Game() {
-  // const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
-  const youtube_2024_metal_playlist = "PLOUzUrKhNae6JqXAjG56Akc79vuzYCOYz";
+  const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
+  // const youtube_2024_metal_playlist = "PLOUzUrKhNae6JqXAjG56Akc79vuzYCOYz";
 
   const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
@@ -49,7 +50,7 @@ export default function Game() {
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        const data = await getPlaylistItemsById(youtube_2024_metal_playlist);
+        const data = await getPlaylistItemsById(youtube_00s_playlist);
 
         if (data === undefined) {
           throw new Error("failed to fetch the playlist items");
@@ -102,15 +103,51 @@ export default function Game() {
     })();
   }, [randomIndexes]);
 
-  function userSelected(selection: "A" | "B") {
-    if (
-      !randomIndexes ||
-      statistics.a === undefined ||
-      statistics.b === undefined
-    )
-      return;
+  //the left TrackCard selects its track from the first indicie of the randomIndexes (so 0)
+  //and the Right TrackCard selects its track from the second indicie of the randomIndexes (so 1)
+  enum options {
+    A = 0,
+    B = 1,
+  }
+
+  function onCorrectSelect(correctOption: options) {
+    if (!randomIndexes) return;
 
     let indexHolder = [...randomIndexes];
+
+    setScore((prev) => prev + 1);
+    setA_Revealed(true);
+    setB_Revealed(true);
+    setTransitioning(true);
+
+    setTimeout(() => {
+      //change both options every third time
+
+      if (score !== 0 && (score + 1) % 3 === 0) {
+        indexHolder[options.B] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+        indexHolder[options.A] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+
+        setA_Revealed(false);
+        setB_Revealed(false);
+      } else if (correctOption === options.A) {
+        indexHolder[options.B] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+        setB_Revealed(false);
+      } else if (correctOption === options.B) {
+        indexHolder[options.A] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+        setA_Revealed(false);
+      }
+
+      setTransitioning(false);
+      setRandomIndexes(indexHolder);
+    }, 2000);
+  }
+
+  function userSelected(selection: "A" | "B") {
+    if (statistics.a === undefined || statistics.b === undefined) return;
 
     switch (selection) {
       case "A":
@@ -119,18 +156,7 @@ export default function Game() {
           parseInt(statistics.b.statistics.viewCount)
         ) {
           //correct answer
-          setScore((prev) => prev + 1);
-          setA_Revealed(true);
-          setB_Revealed(true);
-          setTransitioning(true);
-
-          setTimeout(() => {
-            indexHolder[1] = indexHolder[indexHolder.length - 1];
-            indexHolder.pop();
-            setB_Revealed(false);
-            setTransitioning(false);
-            setRandomIndexes(indexHolder);
-          }, 2000);
+          onCorrectSelect(options.A);
         } else {
           //wrong answer
         }
@@ -143,18 +169,7 @@ export default function Game() {
           parseInt(statistics.a.statistics.viewCount)
         ) {
           //correct answer
-          setScore((prev) => prev + 1);
-          setB_Revealed(true);
-          setA_Revealed(true);
-          setTransitioning(true);
-
-          setTimeout(() => {
-            setA_Revealed(false);
-            indexHolder[0] = indexHolder[indexHolder.length - 1];
-            indexHolder.pop();
-            setTransitioning(false);
-            setRandomIndexes(indexHolder);
-          }, 2000);
+          onCorrectSelect(options.B);
         } else {
           //wrong answer
         }
@@ -169,12 +184,16 @@ export default function Game() {
     <>
       <div>
         {/* scoreboard */}
-        <div className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-10">
+        <AnimatedContainer
+          animateOnlyWidth
+          duration="0.5s"
+          className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-10"
+        >
           <h1 className="text-lg font-semibold">
             Which Song has the most views on Youtube?
           </h1>
           <span className="font-semibold text-lg mt-2">Score : {score}</span>
-        </div>
+        </AnimatedContainer>
 
         {tracks && randomIndexes && !loading && (
           <div className="w-full min-h-svh grid grid-cols-1 grid-rows-2 sm:grid-rows-1 sm:grid-cols-2">
@@ -191,7 +210,7 @@ export default function Game() {
             </div>
 
             {/* or */}
-            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none">
+            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none z-[99999]">
               <span
                 className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 w-20 h-20 relative
                 ${
