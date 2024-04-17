@@ -91,7 +91,7 @@ export default function TrackCard({
             placeholderImg={video.snippet.thumbnails.standard.url}
           />
 
-          <div className="bg-black px-4 py-2 bg-opacity-80">
+          <AnimatedContainer duration="0.3s" className="bg-black bg-opacity-80">
             <h2>{video.snippet.title}</h2>
 
             {statistics && revealed && (
@@ -100,7 +100,7 @@ export default function TrackCard({
                 {parseInt(statistics.statistics.viewCount).toLocaleString()}
               </span>
             )}
-          </div>
+          </AnimatedContainer>
         </div>
       )}
     </>
