@@ -41,8 +41,14 @@ export default function Game() {
 
   useEffect(() => {
     (async () => {
+      //return if we have a access-token
+      if (localStorage.getItem("access-token")) return;
+
       //stores the spotify access token
-      await spotify_storeCredentials().then(() => setLoading(false));
+      await spotify_storeCredentials().then(() => {
+        console.log("Loaded...");
+        window.location.reload();
+      });
     })();
   }, []);
 
