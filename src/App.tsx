@@ -17,7 +17,6 @@ import Date_Icon from "./assets/icons/Date_Icon";
 
 function App() {
   const [selectedPlaylist, setPlaylist] = useState(playlist_urls.y_00s_metal);
-  const [animationDisabled, setAnimationDisabled] = useState(false);
   const [gameMode, setGameMode] = useState<"likes" | "views" | "date">("views");
 
   const navigate = useNavigate();
