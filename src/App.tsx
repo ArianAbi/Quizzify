@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotify_storeCredentials } from "../hooks/useSpotify";
 import playlist_urls from "../playlist_urls";
-import "./css/crooked-animations.css";
+import "./css/crooked-frames.css";
 import {
   Select,
   SelectContent,

@@ -1,6 +1,5 @@
 export default function Like_Icon({
   className,
-  stroke: strokeWidth = 2.5,
 }: {
   className?: string;
   stroke?: number;
