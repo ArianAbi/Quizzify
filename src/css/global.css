@@ -5,9 +5,242 @@
 * {
   margin: 0;
   box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
 }
 
 body {
-  background-color: #08090a;
+  min-height: 100svh;
+  background-color: #1b1b1b;
   color: white;
+
+  transition: clip-path 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  clip-path: circle(100%);
+}
+
+body.closed {
+  clip-path: circle(0%);
+}
+
+.background-scroll-animation {
+  --first-shade: #2d2e2d;
+  --second-shade: #3a3d39;
+  --third-shade: #464b48;
+  --final-background-height: 48px;
+  position: relative;
+  overflow: hidden;
+
+  color: white;
+}
+
+.background-scroll-animation::after {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: -100%;
+  z-index: -1;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--first-shade),
+    var(--first-shade) 20px,
+    var(--second-shade) 20px,
+    var(--second-shade) 30px,
+    var(--third-shade) 30px,
+    var(--third-shade) var(--final-background-height)
+  );
+
+  animation: background-scroll linear infinite 45s;
+}
+
+@keyframes background-scroll {
+  from {
+    transform: translateX(0%);
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateX(50%);
+    transform: translateY(50%);
+  }
+}
+
+.shadow-wraper {
+  position: relative;
+  transform: translateY(-8px);
+  filter: drop-shadow(10px 8px 3px rgba(0, 0, 0, 0.5));
+}
+
+.saw-tooth {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.foreground-pattern-scroll {
+  position: relative;
+  overflow: hidden;
+}
+.foreground-pattern-scroll::before {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  background: url("bg-pattern-transparent.png");
+  opacity: 0.25;
+  background-size: 10%;
+  z-index: -10;
+
+  animation: foreground-scroll infinite linear 140s;
+}
+
+.foreground-pattern-scroll::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -5;
+  background: radial-gradient(transparent 40%, #286d59 100%);
+}
+
+@keyframes foreground-scroll {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
+@media (max-width: 640px) {
+  .foreground-pattern-scroll::before {
+    background-size: 20%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .foreground-pattern-scroll::before {
+    background-size: 16%;
+  }
+}
+
+@media (min-width: 640px) {
+  .saw-tooth {
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 100%,
+      98% 99%,
+      96% 100%,
+      94% 99%,
+      92% 100%,
+      90% 99%,
+      88% 100%,
+      86% 99%,
+      84% 100%,
+      82% 99%,
+      80% 100%,
+      78% 99%,
+      76% 100%,
+      74% 99%,
+      72% 100%,
+      70% 99%,
+      68% 100%,
+      66% 99%,
+      64% 100%,
+      62% 99%,
+      60% 100%,
+      58% 99%,
+      56% 100%,
+      54% 99%,
+      52% 100%,
+      50% 99%,
+      48% 100%,
+      46% 99%,
+      44% 100%,
+      42% 99%,
+      40% 100%,
+      38% 99%,
+      36% 100%,
+      34% 99%,
+      32% 100%,
+      30% 99%,
+      28% 100%,
+      26% 99%,
+      24% 100%,
+      22% 99%,
+      20% 100%,
+      18% 99%,
+      16% 100%,
+      14% 99%,
+      12% 100%,
+      10% 99%,
+      8% 100%,
+      6% 99%,
+      4% 100%,
+      2% 99%,
+      0% 100%
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .saw-tooth {
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 100%,
+      98% 98.5%,
+      96% 100%,
+      94% 98.5%,
+      92% 100%,
+      90% 98.5%,
+      88% 100%,
+      86% 98.5%,
+      84% 100%,
+      82% 98.5%,
+      80% 100%,
+      78% 98.5%,
+      76% 100%,
+      74% 98.5%,
+      72% 100%,
+      70% 98.5%,
+      68% 100%,
+      66% 98.5%,
+      64% 100%,
+      62% 98.5%,
+      60% 100%,
+      58% 98.5%,
+      56% 100%,
+      54% 98.5%,
+      52% 100%,
+      50% 98.5%,
+      48% 100%,
+      46% 98.5%,
+      44% 100%,
+      42% 98.5%,
+      40% 100%,
+      38% 98.5%,
+      36% 100%,
+      34% 98.5%,
+      32% 100%,
+      30% 98.5%,
+      28% 100%,
+      26% 98.5%,
+      24% 100%,
+      22% 98.5%,
+      20% 100%,
+      18% 98.5%,
+      16% 100%,
+      14% 98.5%,
+      12% 100%,
+      10% 98.5%,
+      8% 100%,
+      6% 98.5%,
+      4% 100%,
+      2% 98.5%,
+      0% 100%
+    );
+  }
 }

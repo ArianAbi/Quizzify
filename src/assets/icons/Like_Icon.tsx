@@ -1,4 +1,4 @@
-export default function Check_Icon({
+export default function Like_Icon({
   className,
   stroke: strokeWidth = 2.5,
 }: {
