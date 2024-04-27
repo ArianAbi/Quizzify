@@ -21,6 +21,7 @@ interface tracksInterface {
   duration_ms: number;
   id: string;
   name: string;
+  popularity: number;
 }
 
 export type { tracksInterface as spotify_tracksType };

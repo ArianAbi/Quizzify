@@ -85,7 +85,31 @@ export async function spotify_searchTrack(title: string) {
 
   const result = await respons.json();
 
-  const track = result.tracks.items[0];
+  let most_popular_track = result.tracks.items[0] as spotify_tracksType;
 
-  return track as spotify_tracksType;
+  result.tracks.items.forEach((track: spotify_tracksType) => {
+    // Convert titles from spotify and youtube to arrays of words and make them lowercase
+    const youtube_title_words = title.toLowerCase().split(/\s+/);
+    const spotify_song_title_words = track.name.toLowerCase().split(/\s+/);
+    const spotify_song_artist_words = track.artists[0].name
+      .toLowerCase()
+      .split(/\s+/);
+
+    //if the song is more popular and it contains the name of the song return that
+    if (
+      //check if the title of the song exists
+      spotify_song_title_words.every((word) =>
+        youtube_title_words.includes(word)
+      ) &&
+      //check if the artist name exists
+      spotify_song_artist_words.every((word) =>
+        youtube_title_words.includes(word)
+      ) &&
+      track.popularity > most_popular_track.popularity
+    ) {
+      most_popular_track = track;
+    }
+  });
+
+  return most_popular_track;
 }
