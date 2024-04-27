@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import "./css/Game.css";
 import {
   youtube_playlistByIdType,
   youtube_videoStatisticsType,
@@ -10,10 +9,13 @@ import { spotify_storeCredentials } from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 import Check_Icon from "./assets/icons/Check_Icon";
 import AnimatedContainer from "./components/AnimatedContainer";
+import { useSearchParams } from "react-router-dom";
 
 export default function Game() {
-  const youtube_00s_playlist = "PLcLtbK8Nf64InyudI1rnYwwRbCr08yup_";
-  // const youtube_2024_metal_playlist = "PLOUzUrKhNae6JqXAjG56Akc79vuzYCOYz";
+  const [searchParams] = useSearchParams();
+
+  // const gameMode = searchParams.get("mode");
+  const playlist_Url = searchParams.get("playlist");
 
   const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
@@ -41,10 +43,15 @@ export default function Game() {
 
   useEffect(() => {
     (async () => {
+      //open the body with animation
+      setTimeout(() => {
+        document.body.classList.remove("closed");
+      }, 500);
+
       //return if we have a access-token
       if (localStorage.getItem("access-token")) return;
 
-      //stores the spotify access token
+      //stores the spotify access token if we dont have it and reload
       await spotify_storeCredentials().then(() => {
         console.log("Loaded...");
         window.location.reload();
@@ -53,10 +60,12 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
+    if (!playlist_Url) return;
+
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        const data = await getPlaylistItemsById(youtube_00s_playlist);
+        const data = await getPlaylistItemsById(playlist_Url);
 
         if (data === undefined) {
           throw new Error("failed to fetch the playlist items");
@@ -188,12 +197,12 @@ export default function Game() {
 
   return (
     <>
-      <div>
+      <div className="relative">
         {/* scoreboard */}
         <AnimatedContainer
           animateOnlyWidth
           duration="0.5s"
-          className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-10"
+          className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-50"
         >
           <h1 className="text-lg font-semibold">
             Which Song has the most views on Youtube?
@@ -216,7 +225,7 @@ export default function Game() {
             </div>
 
             {/* or */}
-            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none z-[99999]">
+            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none z-40">
               <span
                 className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 w-20 h-20 relative
                 ${
