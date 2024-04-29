@@ -10,6 +10,7 @@ import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 import Check_Icon from "./assets/icons/Check_Icon";
 import { useSearchParams } from "react-router-dom";
 import { gameModeContext } from "./GameModeContext";
+import Home_Icon from "./assets/icons/Home_Icon";
 
 export default function Game() {
   const [searchParams] = useSearchParams();
@@ -234,6 +235,14 @@ export default function Game() {
   return (
     <>
       <div className="relative">
+        {/* Home button */}
+        <a
+          className="absolute right-4 top-4 z-[999999] bg-black rounded-md bg-opacity-80 p-2 transition-all duration-150 hover:scale-110"
+          href="/"
+        >
+          <Home_Icon />
+        </a>
+
         {/* scoreboard */}
         <div className="absolute left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-80 py-3 px-4 text-center">
           <h1 className="text-lg font-semibold text-center mb-4">
