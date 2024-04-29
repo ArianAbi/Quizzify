@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotify_storeCredentials } from "../hooks/useSpotify";
 import playlist_urls from "../playlist_urls";
@@ -13,11 +13,13 @@ import {
 } from "@/components/ui/select";
 import Like_Icon from "./assets/icons/Like_Icon";
 import View_Icon from "./assets/icons/View_Icon";
-import Date_Icon from "./assets/icons/Date_Icon";
+// import Date_Icon from "./assets/icons/Date_Icon";
+
+import { gameModeContext } from "./GameModeContext";
 
 function App() {
   const [selectedPlaylist, setPlaylist] = useState(playlist_urls.y_00s_metal);
-  const [gameMode, setGameMode] = useState<"likes" | "views" | "date">("views");
+  const { gameMode, setGameMode } = useContext(gameModeContext);
 
   const navigate = useNavigate();
 
@@ -88,7 +90,7 @@ function App() {
                 </div>
 
                 {/* realese date option */}
-                <div
+                {/* <div
                   className={`flex flex-col items-center justify-center w-[130px] aspect-square p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
                   ${
                     gameMode === "date"
@@ -99,7 +101,7 @@ function App() {
                 >
                   <Date_Icon />
                   <span>Release Date</span>
-                </div>
+                </div> */}
 
                 {/* likes option */}
                 <div
@@ -124,7 +126,7 @@ function App() {
             onClick={() => {
               document.body.classList.add("closed");
               setTimeout(() => {
-                navigate(`/game?playlist=${selectedPlaylist}&mode=${gameMode}`);
+                navigate(`/game?playlist=${selectedPlaylist}`);
               }, 500);
             }}
           >

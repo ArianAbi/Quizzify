@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./css/global.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Game from "./Game.tsx";
+import GameModeProvider from "./GameModeContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <GameModeProvider>
+      <RouterProvider router={router} />
+    </GameModeProvider>
   </React.StrictMode>
 );
