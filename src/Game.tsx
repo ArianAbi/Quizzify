@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import {
   youtube_playlistByIdType,
   youtube_videoStatisticsType,
@@ -8,13 +8,13 @@ import TrackCard from "./components/TrackCard";
 import { spotify_storeCredentials } from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
 import Check_Icon from "./assets/icons/Check_Icon";
-import AnimatedContainer from "./components/AnimatedContainer";
 import { useSearchParams } from "react-router-dom";
+import { gameModeContext } from "./GameModeContext";
 
 export default function Game() {
   const [searchParams] = useSearchParams();
 
-  // const gameMode = searchParams.get("mode");
+  const { gameMode } = useContext(gameModeContext);
   const playlist_Url = searchParams.get("playlist");
 
   const [loading, setLoading] = useState(true);
@@ -53,7 +53,6 @@ export default function Game() {
 
       //stores the spotify access token if we dont have it and reload
       await spotify_storeCredentials().then(() => {
-        console.log("Loaded...");
         window.location.reload();
       });
     })();
@@ -162,13 +161,51 @@ export default function Game() {
   }
 
   function userSelected(selection: "A" | "B") {
-    if (statistics.a === undefined || statistics.b === undefined) return;
+    function getReleventStatisticsData(
+      gameMode: string,
+      forTrackCard: "A" | "B"
+    ) {
+      if (statistics.a === undefined || statistics.b === undefined) return;
+
+      switch (gameMode) {
+        case "view":
+          if (forTrackCard === "A") {
+            return statistics.a.statistics.viewCount;
+          } else {
+            return statistics.b.statistics.viewCount;
+          }
+
+        case "likes":
+          if (forTrackCard === "A") {
+            return statistics.a.statistics.likeCount;
+          } else {
+            return statistics.b.statistics.likeCount;
+          }
+
+        default:
+          if (forTrackCard === "A") {
+            return statistics.a.statistics.viewCount;
+          } else {
+            return statistics.b.statistics.viewCount;
+          }
+      }
+    }
+
+    const a_statistics_to_compare = getReleventStatisticsData(
+      gameMode ? gameMode : "",
+      "A"
+    );
+    const b_statistics_to_compare = getReleventStatisticsData(
+      gameMode ? gameMode : "",
+      "B"
+    );
+
+    if (!a_statistics_to_compare || !b_statistics_to_compare) return;
 
     switch (selection) {
       case "A":
         if (
-          parseInt(statistics.a.statistics.viewCount) >
-          parseInt(statistics.b.statistics.viewCount)
+          parseInt(a_statistics_to_compare) > parseInt(b_statistics_to_compare)
         ) {
           //correct answer
           onCorrectSelect(options.A);
@@ -180,8 +217,7 @@ export default function Game() {
 
       case "B":
         if (
-          parseInt(statistics.b.statistics.viewCount) >
-          parseInt(statistics.a.statistics.viewCount)
+          parseInt(b_statistics_to_compare) > parseInt(a_statistics_to_compare)
         ) {
           //correct answer
           onCorrectSelect(options.B);
@@ -199,16 +235,12 @@ export default function Game() {
     <>
       <div className="relative">
         {/* scoreboard */}
-        <AnimatedContainer
-          animateOnlyWidth
-          duration="0.5s"
-          className="absolute top-2/4 -translate-y-2/4 min-w-max sm:top-4 sm:-translate-y-0 left-2/4 -translate-x-2/4 text-center bg-black bg-opacity-80 px-4 py-1 z-50"
-        >
-          <h1 className="text-lg font-semibold">
-            Which Song has the most views on Youtube?
+        <div className="absolute left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-80 py-3 px-4 text-center">
+          <h1 className="text-lg font-semibold text-center mb-4">
+            Which Song has the most {gameMode} on Youtube?
           </h1>
-          <span className="font-semibold text-lg mt-2">Score : {score}</span>
-        </AnimatedContainer>
+          <span className="font-semibold text-lg">Score : {score}</span>
+        </div>
 
         {tracks && randomIndexes && !loading && (
           <div className="w-full min-h-svh grid grid-cols-1 grid-rows-2 sm:grid-rows-1 sm:grid-cols-2">
@@ -235,7 +267,7 @@ export default function Game() {
                 }`}
               >
                 <span
-                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transition-all duration-3 00
+                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transition-all duration-3
                 ${transitioning ? "scale-0" : "scale-100"}`}
                 >
                   OR
@@ -253,9 +285,12 @@ export default function Game() {
 
               {/* divider */}
               <div
-                className={`absolute w-full h-0 sm:h-full sm:w-0 transition-all duration-500
-                ${transitioning ? "bg-emerald-500 h-4 sm:w-4" : "bg-white"}`}
-                style={{ visibility: transitioning ? "visible" : "hidden" }}
+                className={`absolute h-full transition-all duration-500
+                ${
+                  transitioning
+                    ? "bg-emerald-500 w-3 md:w-4"
+                    : "bg-white w-1 md:w-2"
+                }`}
               ></div>
             </div>
 

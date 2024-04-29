@@ -5,9 +5,10 @@ import {
   youtube_playlistByIdType,
   youtube_videoStatisticsType,
 } from "../../types/youtube_types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ProgressiveImage from "./ProgressiveImage";
 import AnimatedContainer from "./AnimatedContainer";
+import { gameModeContext } from "@/GameModeContext";
 
 export default function TrackCard({
   video,
@@ -17,6 +18,9 @@ export default function TrackCard({
   revealed?: boolean;
 }) {
   const [loading, setLoading] = useState(true);
+  const { gameMode } = useContext(gameModeContext);
+  const gameModeUppercased =
+    gameMode.charAt(0).toLocaleUpperCase() + gameMode.slice(1);
 
   const [statistics, setStatistics] =
     useState<null | youtube_videoStatisticsType>(null);
@@ -50,6 +54,8 @@ export default function TrackCard({
     try {
       const result = await getVideoStatistics(id);
 
+      console.log(result?.statistics);
+
       setStatistics(result as youtube_videoStatisticsType);
     } catch (err) {
       console.log(err);
@@ -69,11 +75,13 @@ export default function TrackCard({
               ].url
             }
           />
-          <AnimatedContainer duration="0.3s" className="bg-black bg-opacity-80">
-            <h2>{trackFromSpotify.name}</h2>
-            <h2 className={`${revealed ? "mb-4" : ""} mt-4`}>
-              by {trackFromSpotify.artists[0].name}
-            </h2>
+          <AnimatedContainer duration="0.2s" className="bg-black bg-opacity-80">
+            <div className="">
+              <h2 className="text-lg xl:text-xl">{trackFromSpotify.name}</h2>
+              <h2 className={`${revealed ? "mb-4" : ""} mt-4`}>
+                by {trackFromSpotify.artists[0].name}
+              </h2>
+            </div>
 
             {statistics && (
               <span
@@ -82,8 +90,11 @@ export default function TrackCard({
                   display: revealed ? "block" : "none",
                 }}
               >
-                Views :{" "}
-                {parseInt(statistics.statistics.viewCount).toLocaleString()}
+                {gameModeUppercased} :{" "}
+                {gameMode === "views" &&
+                  parseInt(statistics.statistics.viewCount).toLocaleString()}
+                {gameMode === "likes" &&
+                  parseInt(statistics.statistics.likeCount).toLocaleString()}
               </span>
             )}
           </AnimatedContainer>
@@ -103,8 +114,11 @@ export default function TrackCard({
 
             {statistics && revealed && (
               <span>
-                Views :{" "}
-                {parseInt(statistics.statistics.viewCount).toLocaleString()}
+                {gameModeUppercased} :{" "}
+                {gameMode === "views" &&
+                  parseInt(statistics.statistics.viewCount).toLocaleString()}
+                {gameMode === "likes" &&
+                  parseInt(statistics.statistics.likeCount).toLocaleString()}
               </span>
             )}
           </AnimatedContainer>

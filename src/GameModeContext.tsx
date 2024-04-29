@@ -18,11 +18,6 @@ export default function GameModeProvider({
   children: React.ReactNode;
 }) {
   const [gameMode, setGameMode] = useState<"views" | "likes">("views");
-  const gameModeContext = createContext({
-    gameMode: gameMode,
-    setGameMode: setGameMode,
-  });
-
   return (
     <gameModeContext.Provider value={{ gameMode, setGameMode }}>
       {children}
