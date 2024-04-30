@@ -37,7 +37,7 @@ function App() {
             {/* github link */}
             <a
               target="_blank"
-              className="absolute right-4 top-4 w-12 shadow-lg drop-shadow-sm bg-black p-2 rounded-full transition-all duration-150 hover:scale-110 hover:shadow-xl hover:drop-shadow-lg"
+              className="absolute right-4 top-4 w-10 sm:w-12 shadow-lg drop-shadow-sm bg-black p-2 rounded-full transition-all duration-150 hover:scale-110 hover:shadow-xl hover:drop-shadow-lg"
               href="https://github.com/ArianAbi/Quizzify"
             >
               <img className="invert" src="/github.svg" alt="github-link" />
@@ -138,12 +138,6 @@ function App() {
           >
             Start
           </button>
-
-          {/* tags */}
-          <div className="absolute right-8 bottom-6 opacity-60 flex flex-col gap-2 font-semibold text-lg text-right">
-            <span>Spotify-Logo</span>
-            <span>Youtube-Logo</span>
-          </div>
         </section>
       </div>
     </div>

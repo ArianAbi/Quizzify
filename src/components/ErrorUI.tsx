@@ -3,7 +3,7 @@ export default function ErrorUI() {
     <div className="relative text-center bg-red-600 saturate-[0.65] h-full w-full flex items-center justify-center foreground-pattern-scroll after:hidden before:z-0 before:bg-[size:30%] md:before:bg-[size:15%]">
       {/* github link */}
       <a
-        className="absolute right-4 top-4 w-12 shadow-lg drop-shadow-sm bg-black p-2 rounded-full transition-all duration-150 hover:scale-110 hover:shadow-xl hover:drop-shadow-lg"
+        className="absolute right-4 top-4 w-10 sm:w-12 shadow-lg drop-shadow-sm bg-black p-2 rounded-full transition-all duration-150 hover:scale-110 hover:shadow-xl hover:drop-shadow-lg"
         href="https://github.com/ArianAbi/Quizzify"
       >
         <img className="invert" src="/github.svg" alt="github-link" />
