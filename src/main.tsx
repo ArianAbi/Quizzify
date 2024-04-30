@@ -5,22 +5,34 @@ import "./css/global.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Game from "./Game.tsx";
 import GameModeProvider from "./GameModeContext.tsx";
+import ErrorBoundary from "./components/ErrorBoundary.tsx";
+import ErrorUI from "./components/ErrorUI.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <ErrorBoundary fallback={<ErrorUI />}>
+        <App />
+      </ErrorBoundary>
+    ),
   },
   {
     path: "/game",
-    element: <Game />,
+    element: (
+      <ErrorBoundary fallback={<ErrorUI />}>
+        <Game />
+      </ErrorBoundary>
+    ),
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <GameModeProvider>
-      <RouterProvider router={router} />
-    </GameModeProvider>
+    <ErrorBoundary fallback={<ErrorUI />}>
+      <GameModeProvider>
+        <RouterProvider router={router} />
+      </GameModeProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
