@@ -234,7 +234,7 @@ export default function Game() {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* Home button */}
         <a
           className="absolute right-4 top-4 z-[999999] bg-black rounded-md bg-opacity-80 p-2 transition-all duration-150 hover:scale-110"
@@ -245,10 +245,12 @@ export default function Game() {
 
         {/* scoreboard */}
         <div className="absolute left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-80 py-3 px-4 text-center">
-          <h1 className="text-lg font-semibold text-center mb-4">
+          <h1 className="text-sm md:text-lg font-semibold text-center mb-4">
             Which Song has the most {gameMode} on Youtube?
           </h1>
-          <span className="font-semibold text-lg">Score : {score}</span>
+          <span className="font-semibold text-sm md:text-lg">
+            Score : {score}
+          </span>
         </div>
 
         {tracks && randomIndexes && !loading && (
@@ -268,7 +270,7 @@ export default function Game() {
             {/* or */}
             <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none z-40">
               <span
-                className={`text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 w-20 h-20 relative
+                className={`text-lg md:text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 h-16 w-16 md:w-20 md:h-20 relative
                 ${
                   transitioning
                     ? "bg-emerald-500 text-white scale-125"
@@ -294,7 +296,7 @@ export default function Game() {
 
               {/* divider */}
               <div
-                className={`absolute h-full transition-all duration-500
+                className={`absolute h-full transition-[width] duration-500 rotate-90 sm:rotate-0
                 ${
                   transitioning
                     ? "bg-emerald-500 w-3 md:w-4"

@@ -30,91 +30,87 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full min-h-svh max-h-svh max-w-full background-scroll-animation">
-      <div className="shadow-wraper">
-        <div className="container h-full foreground-pattern-scroll mx-auto bg-[#286D59] saturate-[0.75] min-h-svh sm:min-h-[91svh] flex flex-col gap-2 items-center pt-6 relative saw-tooth drop-shadow translate-y-[8px] sm:translate-y-0">
-          {/* headline text */}
-          <div className="text-center px-10 py-9 crooked-frame">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-wider mb-4">
-              Quizzfy
-            </h1>
-            <p className="text-base font-semibold md:text-lg lg:text-xl ">
-              guess songs popularity
-            </p>
-          </div>
-
-          {/* settings */}
-          <div className="bg-[#b9d4cc] text-black flex flex-col py-4 px-6 gap-6 mt-6 rounded-lg text-center ">
-            {/* platlist */}
-            <div className="flex flex-col gap-6">
-              <h2 className="font-bold text-lg ">Playlist Selection</h2>
-
-              <Select
-                value={playlist_urls.y_00s_metal}
-                onValueChange={(value) => setPlaylist(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select the Playlist" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={playlist_urls.y_00s_metal}>
-                      2000s Metal
-                    </SelectItem>
-                    <SelectItem value={playlist_urls.y_2024_metal}>
-                      2024 Metal
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+    <div className="w-full h-full background-scroll-animation">
+      <div className="shadow-wraper h-full w-full">
+        <section className="container max-h-full sm:max-h-[756px] foreground-pattern-scroll saw-tooth mx-auto h-full bg-[#286D59] saturate-[0.75] flex flex-col gap-6 items-center justify-center sm:justify-start py-6 translate-y-[8px] sm:translate-y-0">
+          <div className="flex flex-col gap-6 items-center">
+            {/* headline text */}
+            <div className="text-center w-max p-5 md:p-10 crooked-frame">
+              <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-wider mb-0 sm:mb-2 md:mb-4">
+                Quizzfy
+              </h1>
+              <p className="text-sm sm:text-base font-semibold md:text-lg lg:text-xl ">
+                guess songs popularity
+              </p>
             </div>
 
-            <hr className="border-black border-opacity-40" />
+            {/* settings */}
+            <div className="bg-[#b9d4cc] text-black flex flex-col py-4 px-6 gap-6 rounded-lg text-center ">
+              {/* platlist */}
+              <div className="flex flex-col gap-3 sm:gap-6">
+                <h2 className="font-bold text-base sm:text-lg ">
+                  Playlist Selection
+                </h2>
 
-            {/* game mode */}
-            <div className="">
-              <h2 className="font-bold text-lg">Game Mode</h2>
-              <div className="flex gap-2 mt-6 mb-4">
-                {/* views option */}
-                <div
-                  className={`flex flex-col items-center justify-center w-[130px] aspect-square p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
+                <Select
+                  value={playlist_urls.y_00s_metal}
+                  onValueChange={(value) => setPlaylist(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select the Playlist" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={playlist_urls.y_00s_metal}>
+                        2000s Metal
+                      </SelectItem>
+                      <SelectItem value={playlist_urls.y_2024_metal}>
+                        2024 Metal
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <hr className="border-black border-opacity-40" />
+
+              {/* game mode */}
+              <div className="">
+                <h2 className="font-bold mb-4 text-base sm:text-lg">
+                  Game Mode
+                </h2>
+                <div className="flex gap-4">
+                  {/* views option */}
+                  <div
+                    className={`flex flex-col items-center justify-center w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
                   ${
                     gameMode === "views"
                       ? "bg-opacity-70 text-white drop-shadow-md shadow-md"
                       : "bg-opacity-0 outline-transparent text-gray-500"
                   }`}
-                  onClick={() => setGameMode("views")}
-                >
-                  <View_Icon />
-                  <span>Views</span>
-                </div>
+                    onClick={() => setGameMode("views")}
+                  >
+                    <View_Icon />
+                    <span className="text-sm sm:text-base md:text-lg">
+                      Views
+                    </span>
+                  </div>
 
-                {/* realese date option */}
-                {/* <div
-                  className={`flex flex-col items-center justify-center w-[130px] aspect-square p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
-                  ${
-                    gameMode === "date"
-                      ? "bg-opacity-70 text-white drop-shadow-md shadow-md"
-                      : "bg-opacity-0 outline-transparent text-gray-500"
-                  }`}
-                  onClick={() => setGameMode("date")}
-                >
-                  <Date_Icon />
-                  <span>Release Date</span>
-                </div> */}
-
-                {/* likes option */}
-                <div
-                  className={`flex flex-col items-center justify-center w-[130px] aspect-square p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
+                  {/* likes option */}
+                  <div
+                    className={`flex flex-col items-center justify-center  w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] p-4 gap-4 cursor-pointer font-semibold transition-all duration-150 rounded-md bg-teal-600 saturate-[0.75] 
                   ${
                     gameMode === "likes"
                       ? "bg-opacity-70 text-white drop-shadow-md shadow-md"
                       : "bg-opacity-0 outline-transparent text-gray-500"
                   }`}
-                  onClick={() => setGameMode("likes")}
-                >
-                  <Like_Icon />
-                  <span>Likes</span>
+                    onClick={() => setGameMode("likes")}
+                  >
+                    <Like_Icon />
+                    <span className="text-sm sm:text-base md:text-lg">
+                      Likes
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -122,7 +118,7 @@ function App() {
 
           {/* start the game button  */}
           <button
-            className="bg-cyan-600 rounded-md mt-8 md:mt-16 px-8 py-3 text-xl sm:text-2xl font-semibold transition-all duration-150 hover:bg-cyan-500 hover:scale-105 hover:drop-shadow-lg"
+            className="bg-cyan-600 rounded-md px-8 py-3 text-xl sm:text-2xl font-semibold transition-all duration-150 hover:bg-cyan-500 hover:scale-105 hover:drop-shadow-lg"
             onClick={() => {
               document.body.classList.add("closed");
               setTimeout(() => {
@@ -134,11 +130,11 @@ function App() {
           </button>
 
           {/* tags */}
-          <div className="mt-10 md:mt-auto sm:mb-4 w-full px-6 py-4 opacity-60 flex flex-col gap-2 font-semibold text-lg text-right">
+          <div className="absolute right-8 bottom-6 opacity-60 flex flex-col gap-2 font-semibold text-lg text-right">
             <span>Spotify-Logo</span>
             <span>Youtube-Logo</span>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

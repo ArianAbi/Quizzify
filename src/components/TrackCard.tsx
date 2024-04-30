@@ -76,11 +76,11 @@ export default function TrackCard({
             }
           />
           <AnimatedContainer duration="0.2s" className="bg-black bg-opacity-80">
-            <div className="">
-              <h2 className="text-lg xl:text-xl">{trackFromSpotify.name}</h2>
-              <h2 className={`${revealed ? "mb-4" : ""} mt-4`}>
+            <div className="text-sm md:text-lg xl:text-xl">
+              <h3>{trackFromSpotify.name}</h3>
+              <span className={`${revealed ? "mb-4" : ""} mt-4`}>
                 by {trackFromSpotify.artists[0].name}
-              </h2>
+              </span>
             </div>
 
             {statistics && (
@@ -110,7 +110,9 @@ export default function TrackCard({
           />
 
           <AnimatedContainer duration="0.3s" className="bg-black bg-opacity-80">
-            <h2>{video.snippet.title}</h2>
+            <h3 className="text-sm md:text-lg xl:text-xl">
+              {video.snippet.title}
+            </h3>
 
             {statistics && revealed && (
               <span>
