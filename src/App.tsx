@@ -34,6 +34,15 @@ function App() {
       <div className="shadow-wraper h-full w-full">
         <section className="container max-h-full sm:max-h-[756px] foreground-pattern-scroll saw-tooth mx-auto h-full bg-[#286D59] saturate-[0.75] flex flex-col gap-6 items-center justify-center sm:justify-start py-6 translate-y-[8px] sm:translate-y-0">
           <div className="flex flex-col gap-6 items-center">
+            {/* github link */}
+            <a
+              target="_blank"
+              className="absolute right-4 top-4 w-12 shadow-lg drop-shadow-sm bg-black p-2 rounded-full transition-all duration-150 hover:scale-110 hover:shadow-xl hover:drop-shadow-lg"
+              href="https://github.com/ArianAbi/Quizzify"
+            >
+              <img className="invert" src="/github.svg" alt="github-link" />
+            </a>
+
             {/* headline text */}
             <div className="text-center w-max p-5 md:p-10 crooked-frame">
               <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-wider mb-0 sm:mb-2 md:mb-4">
@@ -123,6 +132,7 @@ function App() {
               document.body.classList.add("closed");
               setTimeout(() => {
                 navigate(`/game?playlist=${selectedPlaylist}`);
+                document.body.classList.remove("closed");
               }, 500);
             }}
           >
