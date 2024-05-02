@@ -78,38 +78,44 @@ export async function spotify_getPlaylistTracks(playlist_id: string) {
 }
 
 export async function spotify_searchTrack(title: string) {
-  const respons = await fetch(
-    `${baseUrl}/search?q=${encodeURIComponent(title)}&type=track`,
-    options
-  );
+  try {
+    const respons = await fetch(
+      `${baseUrl}/search?q=${encodeURIComponent(title)}&type=track`,
+      options
+    );
 
-  const result = await respons.json();
+    const result = await respons.json();
 
-  let most_popular_track = result.tracks.items[0] as spotify_tracksType;
+    let most_popular_track = result.tracks.items[0] as spotify_tracksType;
 
-  result.tracks.items.forEach((track: spotify_tracksType) => {
-    // Convert titles from spotify and youtube to arrays of words and make them lowercase
-    const youtube_title_words = title.toLowerCase().split(/\s+/);
-    const spotify_song_title_words = track.name.toLowerCase().split(/\s+/);
-    const spotify_song_artist_words = track.artists[0].name
-      .toLowerCase()
-      .split(/\s+/);
+    result.tracks.items.forEach((track: spotify_tracksType) => {
+      // Convert titles from spotify and youtube to arrays of words and make them lowercase
+      const youtube_title_words = title.toLowerCase().split(/\s+/);
+      const spotify_song_title_words = track.name.toLowerCase().split(/\s+/);
+      const spotify_song_artist_words = track.artists[0].name
+        .toLowerCase()
+        .split(/\s+/);
 
-    //if the song is more popular and it contains the name of the song return that
-    if (
-      //check if the title of the song exists
-      spotify_song_title_words.every((word) =>
-        youtube_title_words.includes(word)
-      ) &&
-      //check if the artist name exists
-      spotify_song_artist_words.every((word) =>
-        youtube_title_words.includes(word)
-      ) &&
-      track.popularity > most_popular_track.popularity
-    ) {
-      most_popular_track = track;
-    }
-  });
+      //if the song is more popular and it contains the name of the song return that
+      if (
+        //check if the title of the song exists
+        spotify_song_title_words.every((word) =>
+          youtube_title_words.includes(word)
+        ) &&
+        //check if the artist name exists
+        spotify_song_artist_words.every((word) =>
+          youtube_title_words.includes(word)
+        ) &&
+        track.popularity > most_popular_track.popularity
+      ) {
+        most_popular_track = track;
+      }
+    });
 
-  return most_popular_track;
+    return most_popular_track;
+  } catch (err) {
+    console.log(err);
+
+    return err;
+  }
 }

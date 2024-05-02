@@ -31,6 +31,7 @@ export async function getPlaylistItemsById(id: string) {
     };
   } catch (err) {
     console.log(err);
+    return err;
   }
 }
 
@@ -45,5 +46,6 @@ export async function getVideoStatistics(id: string) {
     return result.items[0] as youtube_videoStatisticsType;
   } catch (err) {
     console.log(err);
+    return err;
   }
 }
