@@ -1,4 +1,4 @@
-import React, { Dispatch, createContext, useState } from "react";
+import React, { Dispatch, createContext, useState, useEffect } from "react";
 
 interface gameModeContextType {
   gameMode: "views" | "likes";
@@ -17,7 +17,18 @@ export default function GameModeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [gameMode, setGameMode] = useState<"views" | "likes">("views");
+  const prefGameMode = localStorage.getItem("gameMode");
+
+  const [gameMode, setGameMode] = useState<"views" | "likes">(
+    prefGameMode ? JSON.parse(prefGameMode).gameMode : "views"
+  );
+
+  //store the game mode
+  useEffect(() => {
+    const pref = JSON.stringify({ gameMode: gameMode });
+    localStorage.setItem("gameMode", pref);
+  }, [gameMode]);
+
   return (
     <gameModeContext.Provider value={{ gameMode, setGameMode }}>
       {children}
