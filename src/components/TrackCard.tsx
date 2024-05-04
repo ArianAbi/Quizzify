@@ -56,8 +56,6 @@ export default function TrackCard({
         id
       )) as youtube_videoStatisticsType;
 
-      console.log(result?.statistics);
-
       setStatistics(result);
     } catch (err) {
       console.log(err);

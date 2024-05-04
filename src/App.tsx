@@ -64,7 +64,6 @@ function App() {
                 <Select
                   value={selectedPlaylist}
                   onValueChange={(value) => {
-                    console.log(value);
                     setPlaylist(value);
                   }}
                 >

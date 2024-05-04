@@ -63,8 +63,6 @@ export async function spotify_getPlaylistByCategory(category: string) {
     options
   );
 
-  console.log(await response.json());
-
   return (await response.json()) as spotify_playlistByCategoryType;
 }
 
