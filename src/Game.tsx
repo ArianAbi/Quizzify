@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { gameModeContext } from "./GameModeContext";
 import Home_Icon from "./assets/icons/Home_Icon";
 import X_Icon from "./assets/icons/X_Icon";
+import GameLost from "./components/GameLost";
 
 export default function Game() {
   const [searchParams] = useSearchParams();
@@ -28,7 +29,9 @@ export default function Game() {
 
   const [A_Revealed, setA_Revealed] = useState(false);
   const [B_Revealed, setB_Revealed] = useState(false);
+
   const [transitioning, setTransitioning] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false);
 
   const { current: statistics } = useRef<{
     a: youtube_videoStatisticsType | undefined;
@@ -169,12 +172,20 @@ export default function Game() {
   }
 
   function onWrongSelection() {
-    console.log("WRONG");
-
     setLossScore((prev) => prev + 1);
   }
 
+  //end the game if user has picked 3 wrong answers
+  useEffect(() => {
+    if (lossScore >= 3) {
+      setGameEnded(true);
+    }
+  }, [lossScore]);
+
   function userSelected(selection: "A" | "B") {
+    //dont accept inputs if the game is lost or its changing
+    if (transitioning || gameEnded) return;
+
     function getReleventStatisticsData(
       gameMode: string,
       forTrackCard: "A" | "B"
@@ -249,6 +260,8 @@ export default function Game() {
 
   return (
     <>
+      {gameEnded && <GameLost score={score} />}
+
       <div className="relative overflow-hidden">
         {/* Home button */}
         <a
