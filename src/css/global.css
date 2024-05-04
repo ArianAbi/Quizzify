@@ -89,7 +89,7 @@ body.closed {
   top: 0;
   width: 200%;
   height: 100%;
-  background: url("bg-pattern-transparent.png");
+  background: url("../../public/bg-pattern-transparent.png");
   opacity: 0.25;
   background-size: 10%;
   z-index: -10;
