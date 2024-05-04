@@ -247,11 +247,14 @@ export default function Game() {
           <Home_Icon />
         </a>
 
+        {/* game mode display */}
+        <div className="absolute bottom-3 left-4 bg-black rounded-md px-2 py-1 bg-opacity-80 opacity-60 pointer-events-none">
+          game mode :{" "}
+          <span className="underline underline-offset-4">{gameMode}</span>
+        </div>
+
         {/* scoreboard */}
         <div className="absolute left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-80 py-3 px-4 text-center">
-          <h1 className="text-sm md:text-lg font-semibold text-center mb-4">
-            Which Song has the most {gameMode} on Youtube?
-          </h1>
           <span className="font-semibold text-sm md:text-lg">
             Score : {score}
           </span>
