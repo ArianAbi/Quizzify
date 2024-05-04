@@ -4,23 +4,20 @@ export default function AnimatedContainer({
   children,
   className,
   duration,
-  animateOnlyWidth,
 }: {
   children: React.ReactNode;
   className?: string;
   duration: string;
-  animateOnlyWidth?: boolean;
 }) {
-  const heightMask = useRef<any>();
-  const content = useRef<any>();
+  const heightMask = useRef<HTMLDivElement | null>(null);
+  const content = useRef<HTMLDivElement | null>(null);
 
   function setDimentions() {
+    if (!heightMask.current || !content.current) return;
+
     const paddingX = 50;
     const paddingY = 25;
 
-    console.log(content.current.style.paddingLeft);
-
-    // heightMask.current.style.maxHeight = `${content.current.clientHeight}px`;
     heightMask.current.style.minHeight = `${
       content.current.clientHeight + paddingY
     }px`;

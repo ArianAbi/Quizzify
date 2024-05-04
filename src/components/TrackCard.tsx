@@ -36,7 +36,7 @@ export default function TrackCard({
 
   async function getTrackFromSpotify(title: string) {
     try {
-      const track = await spotify_searchTrack(title);
+      const track = (await spotify_searchTrack(title)) as spotify_tracksType;
 
       track && setTrackFromSpotify(track);
     } catch (err) {
@@ -52,11 +52,13 @@ export default function TrackCard({
 
   async function getStatistics(id: string) {
     try {
-      const result = await getVideoStatistics(id);
+      const result = (await getVideoStatistics(
+        id
+      )) as youtube_videoStatisticsType;
 
       console.log(result?.statistics);
 
-      setStatistics(result as youtube_videoStatisticsType);
+      setStatistics(result);
     } catch (err) {
       console.log(err);
     }

@@ -65,18 +65,22 @@ export default function Game() {
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        const data = await getPlaylistItemsById(playlist_Url);
+        const data = (await getPlaylistItemsById(playlist_Url)) as {
+          items: youtube_playlistByIdType[];
+        };
 
-        if (data === undefined) {
+        if (data === undefined || data === null) {
           throw new Error("failed to fetch the playlist items");
         }
 
         //remove deleted videos to prevent errors
-        const clean_list = data.items.filter((item) => {
-          if (item.snippet.title !== "Deleted video") {
-            return item as youtube_playlistByIdType;
+        const clean_list = data.items.filter(
+          (item: youtube_playlistByIdType) => {
+            if (item.snippet.title !== "Deleted video") {
+              return item as youtube_playlistByIdType;
+            }
           }
-        });
+        );
 
         setTracks(clean_list as youtube_playlistByIdType[]);
         setLoading(false);
@@ -128,7 +132,7 @@ export default function Game() {
   function onCorrectSelect(correctOption: options) {
     if (!randomIndexes) return;
 
-    let indexHolder = [...randomIndexes];
+    const indexHolder = [...randomIndexes];
 
     setScore((prev) => prev + 1);
     setA_Revealed(true);
