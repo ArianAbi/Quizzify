@@ -62,8 +62,11 @@ function App() {
                 </h2>
 
                 <Select
-                  value={playlist_urls.y_00s_metal}
-                  onValueChange={(value) => setPlaylist(value)}
+                  value={selectedPlaylist}
+                  onValueChange={(value) => {
+                    console.log(value);
+                    setPlaylist(value);
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select the Playlist" />
