@@ -108,6 +108,22 @@ body.closed {
   background: radial-gradient(transparent 40%, #286d59 100%);
 }
 
+.check-loss-x {
+  color: red;
+  transform: scale(2);
+
+  animation: check-loss-x 0.3s ease-in forwards;
+}
+
+@keyframes check-loss-x {
+  from {
+    transform: scale(2);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
 @keyframes foreground-scroll {
   from {
     transform: translateX(0%);

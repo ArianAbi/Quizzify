@@ -11,6 +11,7 @@ import Check_Icon from "./assets/icons/Check_Icon";
 import { useSearchParams } from "react-router-dom";
 import { gameModeContext } from "./GameModeContext";
 import Home_Icon from "./assets/icons/Home_Icon";
+import X_Icon from "./assets/icons/X_Icon";
 
 export default function Game() {
   const [searchParams] = useSearchParams();
@@ -21,7 +22,9 @@ export default function Game() {
   const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
   const [tracks, setTracks] = useState<null | youtube_playlistByIdType[]>(null);
+
   const [score, setScore] = useState(0);
+  const [lossScore, setLossScore] = useState(0);
 
   const [A_Revealed, setA_Revealed] = useState(false);
   const [B_Revealed, setB_Revealed] = useState(false);
@@ -165,6 +168,12 @@ export default function Game() {
     }, 2000);
   }
 
+  function onWrongSelection() {
+    console.log("WRONG");
+
+    setLossScore((prev) => prev + 1);
+  }
+
   function userSelected(selection: "A" | "B") {
     function getReleventStatisticsData(
       gameMode: string,
@@ -216,6 +225,7 @@ export default function Game() {
           onCorrectSelect(options.A);
         } else {
           //wrong answer
+          onWrongSelection();
         }
 
         break;
@@ -228,6 +238,7 @@ export default function Game() {
           onCorrectSelect(options.B);
         } else {
           //wrong answer
+          onWrongSelection();
         }
         break;
 
@@ -254,9 +265,24 @@ export default function Game() {
         </div>
 
         {/* scoreboard */}
-        <div className="absolute left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-80 py-3 px-4 text-center">
+        <div className="absolute flex flex-col gap-2 left-2/4 top-4 -translate-x-2/4 z-[9999] pointer-events-none bg-black bg-opacity-50 py-3 px-4 text-center rounded-md">
           <span className="font-semibold text-sm md:text-lg">
             Score : {score}
+          </span>
+
+          <span className="flex justify-center gap-2 font-semibold scale-75 sm:scale-100">
+            {Array(3)
+              .fill("")
+              .map((_e, _i) => {
+                return (
+                  <X_Icon
+                    key={_i}
+                    className={`${
+                      _i + 1 <= lossScore ? "check-loss-x" : "text-white"
+                    }`}
+                  />
+                );
+              })}
           </span>
         </div>
 
