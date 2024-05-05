@@ -75,7 +75,7 @@ export default function TrackCard({
               ].url
             }
           />
-          <AnimatedContainer duration="0.2s" className="bg-black bg-opacity-80">
+          <AnimatedContainer duration="0.2s" className="bg-black bg-opacity-60">
             <div className="text-sm md:text-lg xl:text-xl">
               <h3>{trackFromSpotify.name}</h3>
               <span className={`${revealed ? "mb-4" : ""} mt-4`}>

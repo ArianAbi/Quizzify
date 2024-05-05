@@ -44,7 +44,7 @@ export default function AnimatedContainer({
   return (
     <>
       <div
-        className={`absolute bg-black mx-4 p-4 min-w-0 min-h-0 max-w-2 max-h-4 overflow-hidden ${className}`}
+        className={`absolute bg-black mx-4 p-4 min-w-0 min-h-0 max-w-2 max-h-4 overflow-hidden rounded-md ${className}`}
         style={{
           transition: `min-height max-height min-width max-width ease`,
           transitionDuration: duration,
