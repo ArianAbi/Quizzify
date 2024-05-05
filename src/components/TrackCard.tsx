@@ -5,7 +5,7 @@ import {
   youtube_playlistByIdType,
   youtube_videoStatisticsType,
 } from "../../types/youtube_types";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import ProgressiveImage from "./ProgressiveImage";
 import AnimatedContainer from "./AnimatedContainer";
 import { gameModeContext } from "@/GameModeContext";
@@ -46,7 +46,7 @@ export default function TrackCard({
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setLoading(false);
   }, [trackFromSpotify]);
 
@@ -64,7 +64,7 @@ export default function TrackCard({
 
   return (
     <>
-      {trackFromSpotify && !loading && (
+      {!loading && trackFromSpotify && (
         <div className="cursor-pointer text-xl font-bold overflow-hidden h-full w-full relative flex flex-col gap-6 justify-center items-center group text-center">
           <ProgressiveImage
             className="absolute left-0 top-0 w-full h-full z-[-1] object-cover transition-all brightness-75 group-hover:brightness-50"
@@ -101,29 +101,9 @@ export default function TrackCard({
         </div>
       )}
 
-      {!loading && !trackFromSpotify && (
+      {loading && (
         <div className="cursor-pointer text-xl font-bold overflow-hidden h-full w-full relative flex flex-col gap-6 justify-center items-center group text-center">
-          <ProgressiveImage
-            className="absolute left-0 top-0 w-full h-full z-[-1] object-cover transition-all brightness-75 group-hover:brightness-50"
-            img={video.snippet.thumbnails.default.url}
-            placeholderImg={video.snippet.thumbnails.medium.url}
-          />
-
-          <AnimatedContainer duration="0.3s" className="bg-black bg-opacity-80">
-            <h3 className="text-sm md:text-lg xl:text-xl">
-              {video.snippet.title}
-            </h3>
-
-            {statistics && revealed && (
-              <span>
-                {gameModeUppercased} :{" "}
-                {gameMode === "views" &&
-                  parseInt(statistics.statistics.viewCount).toLocaleString()}
-                {gameMode === "likes" &&
-                  parseInt(statistics.statistics.likeCount).toLocaleString()}
-              </span>
-            )}
-          </AnimatedContainer>
+          loading
         </div>
       )}
     </>
