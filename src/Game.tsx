@@ -5,14 +5,14 @@ import {
 } from "../types/youtube_types";
 import { getPlaylistItemsById, getVideoStatistics } from "../hooks/useYoutube";
 import TrackCard from "./components/TrackCard";
-import { spotify_storeCredentials } from "../hooks/useSpotify";
+import { spotify_renew_access_token } from "../hooks/useSpotify";
 import { generateRandomIndexInRange } from "../hooks/useRandomIndexGenerator";
-import Check_Icon from "./assets/icons/Check_Icon";
 import { useSearchParams } from "react-router-dom";
 import { gameModeContext } from "./GameModeContext";
 import Home_Icon from "./assets/icons/Home_Icon";
 import X_Icon from "./assets/icons/X_Icon";
 import GameLost from "./components/GameLost";
+import Separator from "./components/Separator";
 
 export default function Game() {
   const [searchParams] = useSearchParams();
@@ -30,7 +30,10 @@ export default function Game() {
   const [A_Revealed, setA_Revealed] = useState(false);
   const [B_Revealed, setB_Revealed] = useState(false);
 
-  const [transitioning, setTransitioning] = useState(false);
+  const [transitionState, setTransitioning] = useState<{
+    isTransitiong: boolean;
+    answerWas: "wrong" | "correct";
+  }>({ isTransitiong: false, answerWas: "correct" });
   const [gameEnded, setGameEnded] = useState(false);
 
   const { current: statistics } = useRef<{
@@ -59,7 +62,7 @@ export default function Game() {
       if (localStorage.getItem("access-token")) return;
 
       //stores the spotify access token if we dont have it and reload
-      await spotify_storeCredentials().then(() => {
+      await spotify_renew_access_token().then(() => {
         window.location.reload();
       });
     })();
@@ -143,7 +146,7 @@ export default function Game() {
     setScore((prev) => prev + 1);
     setA_Revealed(true);
     setB_Revealed(true);
-    setTransitioning(true);
+    setTransitioning({ isTransitiong: true, answerWas: "correct" });
 
     setTimeout(() => {
       //change both options every third time
@@ -166,13 +169,39 @@ export default function Game() {
         setA_Revealed(false);
       }
 
-      setTransitioning(false);
+      setTransitioning({ isTransitiong: false, answerWas: "correct" });
       setRandomIndexes(indexHolder);
     }, 2000);
   }
 
-  function onWrongSelection() {
+  function onWrongSelection(selectedOption: options) {
+    if (!randomIndexes) return;
+
+    const indexHolder = [...randomIndexes];
+
     setLossScore((prev) => prev + 1);
+    setA_Revealed(true);
+    setB_Revealed(true);
+    setTransitioning({ isTransitiong: true, answerWas: "wrong" });
+
+    setTimeout(() => {
+      //change both options every third time
+
+      if (lossScore >= 3) return;
+
+      if (selectedOption === options.A) {
+        indexHolder[options.B] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+        setB_Revealed(false);
+      } else if (selectedOption === options.B) {
+        indexHolder[options.A] = indexHolder[indexHolder.length - 1];
+        indexHolder.pop();
+        setA_Revealed(false);
+      }
+
+      setTransitioning({ isTransitiong: false, answerWas: "wrong" });
+      setRandomIndexes(indexHolder);
+    }, 2000);
   }
 
   //end the game if user has picked 3 wrong answers
@@ -184,7 +213,7 @@ export default function Game() {
 
   function userSelected(selection: "A" | "B") {
     //dont accept inputs if the game is lost or its changing
-    if (transitioning || gameEnded) return;
+    if (transitionState.isTransitiong || gameEnded) return;
 
     function getReleventStatisticsData(
       gameMode: string,
@@ -236,7 +265,7 @@ export default function Game() {
           onCorrectSelect(options.A);
         } else {
           //wrong answer
-          onWrongSelection();
+          onWrongSelection(options.A);
         }
 
         break;
@@ -249,7 +278,7 @@ export default function Game() {
           onCorrectSelect(options.B);
         } else {
           //wrong answer
-          onWrongSelection();
+          onWrongSelection(options.B);
         }
         break;
 
@@ -314,42 +343,10 @@ export default function Game() {
             </div>
 
             {/* or */}
-            <div className="flex items-center justify-center absolute left-2/4 -translate-x-2/4 w-full h-full pointer-events-none z-40">
-              <span
-                className={`text-lg md:text-2xl font-semibold p-5 aspect-square rounded-full text-black z-[5] transition-all duration-500 h-16 w-16 md:w-20 md:h-20 relative
-                ${
-                  transitioning
-                    ? "bg-emerald-500 text-white scale-125"
-                    : "bg-white"
-                }`}
-              >
-                <span
-                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transition-all duration-3
-                ${transitioning ? "scale-0" : "scale-100"}`}
-                >
-                  OR
-                </span>
-
-                <Check_Icon
-                  className={`absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 text-white transition-all duration-500
-                  ${
-                    transitioning
-                      ? "scale-100 rotate-0"
-                      : "scale-0 -rotate-[180deg]"
-                  }`}
-                />
-              </span>
-
-              {/* divider */}
-              <div
-                className={`absolute h-full transition-[width] duration-500 rotate-90 sm:rotate-0
-                ${
-                  transitioning
-                    ? "bg-emerald-500 w-3 md:w-4"
-                    : "bg-white w-1 md:w-2"
-                }`}
-              ></div>
-            </div>
+            <Separator
+              isTransitiong={transitionState.isTransitiong}
+              answerWas={transitionState.answerWas}
+            />
 
             {/* second track , option B */}
             <div
