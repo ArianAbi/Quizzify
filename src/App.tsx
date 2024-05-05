@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { spotify_storeCredentials } from "../hooks/useSpotify";
+import { spotify_renew_access_token } from "../hooks/useSpotify";
 import playlist_urls from "../playlist_urls";
 import "./css/crooked-frames.css";
 import {
@@ -25,7 +25,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      await spotify_storeCredentials();
+      await spotify_renew_access_token();
     })();
   }, []);
 

@@ -21,6 +21,8 @@ export async function spotify_storeCredentials() {
   const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const SECRET = import.meta.env.VITE_SECRET;
 
+  const spotify_access_token_expire_time_in_milliseconds = 3600 * 1000;
+
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     body:
@@ -35,9 +37,43 @@ export async function spotify_storeCredentials() {
 
   const result = await response.json();
 
-  result && localStorage.setItem("access-token", JSON.stringify(result));
+  const access_token_with_date = {
+    ...result,
+    hasCreditTill:
+      new Date().getTime() + spotify_access_token_expire_time_in_milliseconds,
+  };
+
+  result &&
+    localStorage.setItem(
+      "access-token",
+      JSON.stringify(access_token_with_date)
+    );
 
   return "200 access token set";
+}
+
+export async function spotify_renew_access_token() {
+  const stored_access_token = localStorage.getItem("access-token");
+
+  //store access token if we dont have any
+  if (!stored_access_token) {
+    const result = await spotify_storeCredentials();
+
+    return result;
+  }
+
+  const access_token_json = JSON.parse(stored_access_token);
+
+  //if our access token has expired delete the existing one and store a new one
+  if (new Date().getTime >= access_token_json.hasCreditTill) {
+    localStorage.removeItem("access-token");
+
+    const result = await spotify_storeCredentials();
+
+    return result;
+  } else {
+    return "spotify access token has now expired yet";
+  }
 }
 
 export async function spotify_getArtistByID(Artist_ID: string) {
