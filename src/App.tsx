@@ -8,6 +8,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -18,7 +19,7 @@ import View_Icon from "./assets/icons/View_Icon";
 import { gameModeContext } from "./GameModeContext";
 
 function App() {
-  const [selectedPlaylist, setPlaylist] = useState(playlist_urls.y_00s_metal);
+  const [selectedPlaylist, setPlaylist] = useState(playlist_urls.y_00s_pop);
   const { gameMode, setGameMode } = useContext(gameModeContext);
 
   const navigate = useNavigate();
@@ -72,11 +73,31 @@ function App() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
+                      <SelectLabel>Pop</SelectLabel>
+
+                      <SelectItem value={playlist_urls.y_00s_pop}>
+                        2000s Pop Hit
+                      </SelectItem>
+                      <SelectItem value={playlist_urls.y_10s_pop}>
+                        2010s Pop Hit
+                      </SelectItem>
+
+                      <SelectLabel>Metal</SelectLabel>
+
                       <SelectItem value={playlist_urls.y_00s_metal}>
                         2000s Metal
                       </SelectItem>
-                      <SelectItem value={playlist_urls.y_2024_metal}>
-                        2024 Metal
+                      <SelectItem value={playlist_urls.modern_metal}>
+                        Modern Metal
+                      </SelectItem>
+
+                      <SelectLabel>Persian</SelectLabel>
+
+                      <SelectItem value={playlist_urls.old_perisan}>
+                        Old Persian Songs
+                      </SelectItem>
+                      <SelectItem value={playlist_urls.persian_rap}>
+                        Persian Rap
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>
