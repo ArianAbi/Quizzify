@@ -22,7 +22,7 @@ export default function Game() {
 
   const [loading, setLoading] = useState(true);
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
-  const [tracks, setTracks] = useState<null | youtube_playlistByIdType[]>(null);
+  const [tracks, setTracks] = useState<null | youtube_playlistByIdType>(null);
 
   const [score, setScore] = useState(0);
   const [lossScore, setLossScore] = useState(0);
@@ -74,24 +74,24 @@ export default function Game() {
     //gets items list from a youtube playlist by id
     (async () => {
       try {
-        const data = (await getPlaylistItemsById(playlist_Url)) as {
-          items: youtube_playlistByIdType[];
-        };
+        const data = (await getPlaylistItemsById(
+          playlist_Url
+        )) as youtube_playlistByIdType;
 
         if (data === undefined || data === null) {
           throw new Error("failed to fetch the playlist items");
         }
 
-        //remove deleted videos to prevent errors
-        const clean_list = data.items.filter(
-          (item: youtube_playlistByIdType) => {
-            if (item.snippet.title !== "Deleted video") {
-              return item as youtube_playlistByIdType;
-            }
-          }
-        );
+        console.log(data.nextPageToken);
 
-        setTracks(clean_list as youtube_playlistByIdType[]);
+        //remove deleted videos to prevent errors
+        const clean_items = data.items.filter((item) => {
+          if (item.snippet.title !== "Deleted video") {
+            return item;
+          }
+        });
+
+        setTracks({ items: clean_items, nextPageToken: data.nextPageToken });
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -103,13 +103,13 @@ export default function Game() {
   useEffect(() => {
     if (!tracks) return;
 
-    setRandomIndexes(generateRandomIndexInRange(tracks.length));
+    setRandomIndexes(generateRandomIndexInRange(tracks.items.length));
   }, [tracks]);
 
   useEffect(() => {
     if (!tracks) return;
 
-    if (tracks.length <= 2) {
+    if (tracks.items.length <= 2) {
       alert("List Is to Short");
     }
   }, [tracks]);
@@ -120,10 +120,10 @@ export default function Game() {
 
     (async () => {
       const a = await getStatistics(
-        tracks[randomIndexes[0]].snippet.resourceId.videoId
+        tracks.items[randomIndexes[0]].snippet.resourceId.videoId
       );
       const b = await getStatistics(
-        tracks[randomIndexes[1]].snippet.resourceId.videoId
+        tracks.items[randomIndexes[1]].snippet.resourceId.videoId
       );
 
       statistics.a = a;
@@ -337,7 +337,7 @@ export default function Game() {
             >
               <TrackCard
                 revealed={A_Revealed}
-                video={tracks[randomIndexes[0]]}
+                video={tracks.items[randomIndexes[0]]}
                 key={randomIndexes[0]}
               />
             </div>
@@ -355,7 +355,7 @@ export default function Game() {
             >
               <TrackCard
                 revealed={B_Revealed}
-                video={tracks[randomIndexes[1]]}
+                video={tracks.items[randomIndexes[1]]}
                 key={randomIndexes[1]}
               />
             </div>

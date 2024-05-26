@@ -1,4 +1,4 @@
-interface youtube_playlistById {
+interface playlist_item_type {
   snippet: {
     description: string;
     title: string;
@@ -29,6 +29,13 @@ interface youtube_playlistById {
       };
     };
   };
+}
+
+export type { playlist_item_type };
+
+interface youtube_playlistById {
+  items: playlist_item_type[];
+  nextPageToken: string;
 }
 
 export type { youtube_playlistById as youtube_playlistByIdType };

@@ -2,7 +2,7 @@ import { spotify_searchTrack } from "../../hooks/useSpotify";
 import { spotify_tracksType } from "../../types/spotify_type";
 import { getVideoStatistics } from "../../hooks/useYoutube";
 import {
-  youtube_playlistByIdType,
+  playlist_item_type,
   youtube_videoStatisticsType,
 } from "../../types/youtube_types";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
@@ -14,7 +14,7 @@ export default function TrackCard({
   video,
   revealed,
 }: {
-  video: youtube_playlistByIdType;
+  video: playlist_item_type;
   revealed?: boolean;
 }) {
   const [loading, setLoading] = useState(true);
