@@ -24,6 +24,8 @@ export default function Game() {
   const [randomIndexes, setRandomIndexes] = useState<null | number[]>();
   const [tracks, setTracks] = useState<null | youtube_playlistByIdType>(null);
 
+  const [nextPageToken, setNextPageToken] = useState("");
+
   const [score, setScore] = useState(0);
   const [lossScore, setLossScore] = useState(0);
 
@@ -68,35 +70,45 @@ export default function Game() {
     })();
   }, []);
 
+  async function getItemsFromYoutube(
+    playlist_Url: string,
+    nextPageToken: string
+  ) {
+    try {
+      const data = (await getPlaylistItemsById(
+        playlist_Url,
+        nextPageToken
+      )) as youtube_playlistByIdType;
+
+      if (data === undefined || data === null) {
+        throw new Error("failed to fetch the playlist items");
+      }
+
+      if (data.nextPageToken) {
+        console.log(data.nextPageToken);
+
+        setNextPageToken(data.nextPageToken);
+      }
+
+      //remove deleted videos to prevent errors
+      const clean_items = data.items.filter((item) => {
+        if (item.snippet.title !== "Deleted video") {
+          return item;
+        }
+      });
+
+      setTracks({ items: clean_items, nextPageToken: data.nextPageToken });
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (!playlist_Url) return;
 
     //gets items list from a youtube playlist by id
-    (async () => {
-      try {
-        const data = (await getPlaylistItemsById(
-          playlist_Url
-        )) as youtube_playlistByIdType;
-
-        if (data === undefined || data === null) {
-          throw new Error("failed to fetch the playlist items");
-        }
-
-        console.log(data.nextPageToken);
-
-        //remove deleted videos to prevent errors
-        const clean_items = data.items.filter((item) => {
-          if (item.snippet.title !== "Deleted video") {
-            return item;
-          }
-        });
-
-        setTracks({ items: clean_items, nextPageToken: data.nextPageToken });
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    getItemsFromYoutube(playlist_Url, "");
   }, [loading]);
 
   //generate the indexes after we got the list of tracks
@@ -106,13 +118,18 @@ export default function Game() {
     setRandomIndexes(generateRandomIndexInRange(tracks.items.length));
   }, [tracks]);
 
+  //check the list length , if the list has become too short get the next page
   useEffect(() => {
-    if (!tracks) return;
+    if (!randomIndexes) return;
 
-    if (tracks.items.length <= 2) {
-      alert("List Is to Short");
+    if (randomIndexes.length <= 2) {
+      if (playlist_Url && nextPageToken !== "") {
+        getItemsFromYoutube(playlist_Url, nextPageToken);
+      } else {
+        alert("List Is to Short , The Game Is Done");
+      }
     }
-  }, [tracks]);
+  }, [randomIndexes]);
 
   //fetch the statistics for
   useEffect(() => {

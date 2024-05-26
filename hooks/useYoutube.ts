@@ -17,10 +17,14 @@ export async function getVideoByTerm(term: string) {
   }
 }
 
-export async function getPlaylistItemsById(id: string) {
+export async function getPlaylistItemsById(id: string, nextPageToken?: string) {
   try {
     const response = await fetch(
-      `${baseUrl}/playlistItems?part=snippet&maxResults=50&playlistId=${id}&key=${KEY}`
+      `${baseUrl}/playlistItems?part=snippet&maxResults=50&playlistId=${id}&key=${KEY}${
+        nextPageToken && nextPageToken !== ""
+          ? `&pageToken=${nextPageToken}`
+          : ""
+      }`
     );
 
     const result = await response.json();
